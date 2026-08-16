@@ -14,7 +14,146 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bids: {
+        Row: {
+          amount: number
+          bidder_id: string
+          bidder_name: string
+          created_at: string
+          delivery_days: number
+          id: string
+          project_id: string
+          proposal: string
+        }
+        Insert: {
+          amount: number
+          bidder_id: string
+          bidder_name?: string
+          created_at?: string
+          delivery_days?: number
+          id?: string
+          project_id: string
+          proposal: string
+        }
+        Update: {
+          amount?: number
+          bidder_id?: string
+          bidder_name?: string
+          created_at?: string
+          delivery_days?: number
+          id?: string
+          project_id?: string
+          proposal?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bids_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          account_role: string
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string
+          headline: string | null
+          hourly_rate: number | null
+          id: string
+          location: string | null
+          rating: number
+          reviews_count: number
+          skills: string[]
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          account_role?: string
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string
+          headline?: string | null
+          hourly_rate?: number | null
+          id?: string
+          location?: string | null
+          rating?: number
+          reviews_count?: number
+          skills?: string[]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          account_role?: string
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string
+          headline?: string | null
+          hourly_rate?: number | null
+          id?: string
+          location?: string | null
+          rating?: number
+          reviews_count?: number
+          skills?: string[]
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          budget_max: number
+          budget_min: number
+          budget_type: string
+          category: string
+          created_at: string
+          description: string
+          id: string
+          owner_id: string | null
+          owner_name: string
+          skills: string[]
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          budget_max?: number
+          budget_min?: number
+          budget_type?: string
+          category?: string
+          created_at?: string
+          description: string
+          id?: string
+          owner_id?: string | null
+          owner_name?: string
+          skills?: string[]
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          budget_max?: number
+          budget_min?: number
+          budget_type?: string
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          owner_id?: string | null
+          owner_name?: string
+          skills?: string[]
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
