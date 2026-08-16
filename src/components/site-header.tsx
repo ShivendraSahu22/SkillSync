@@ -80,9 +80,7 @@ export function SiteHeader() {
                 <Link to="/auth">Log in</Link>
               </Button>
               <Button asChild size="sm">
-                <Link to="/auth" search={{ mode: "signup" }}>
-                  Join free
-                </Link>
+                <Link to="/auth">Join free</Link>
               </Button>
             </>
           )}
