@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/projects/")({
   head: () => ({
     meta: [
-      { title: "Browse freelance projects — Freelanceo" },
+      { title: "Browse freelance projects — SkillSync" },
       {
         name: "description",
         content:

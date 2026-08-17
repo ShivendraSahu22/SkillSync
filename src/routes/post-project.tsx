@@ -20,13 +20,13 @@ import { CATEGORIES } from "@/lib/marketplace";
 export const Route = createFileRoute("/post-project")({
   head: () => ({
     meta: [
-      { title: "Post a project — Freelanceo" },
+      { title: "Post a project — SkillSync" },
       {
         name: "description",
         content:
           "Describe your project, set a budget and start receiving proposals from vetted freelancers within hours.",
       },
-      { property: "og:title", content: "Post a project on Freelanceo" },
+      { property: "og:title", content: "Post a project on SkillSync" },
       {
         property: "og:description",
         content: "Publish a brief and collect proposals from freelancers fast.",

@@ -12,13 +12,13 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Log in or join — Freelanceo marketplace" },
+      { title: "Log in or join — SkillSync marketplace" },
       {
         name: "description",
         content:
-          "Create a Freelanceo account to post projects, bid on work and manage your freelance pipeline.",
+          "Create a SkillSync account to post projects, bid on work and manage your freelance pipeline.",
       },
-      { property: "og:title", content: "Log in or join Freelanceo" },
+      { property: "og:title", content: "Log in or join SkillSync" },
       {
         property: "og:description",
         content: "One account for hiring talent and winning freelance work.",

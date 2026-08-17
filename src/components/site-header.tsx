@@ -30,7 +30,7 @@ export function SiteHeader() {
           <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <Briefcase className="size-4" />
           </span>
-          <span className="font-display text-lg font-semibold tracking-tight">Freelanceo</span>
+          <span className="font-display text-lg font-semibold tracking-tight">SkillSync</span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
