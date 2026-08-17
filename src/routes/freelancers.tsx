@@ -11,7 +11,7 @@ import { fetchFreelancers, initials } from "@/lib/marketplace";
 export const Route = createFileRoute("/freelancers")({
   head: () => ({
     meta: [
-      { title: "Hire vetted freelancers — Freelanceo" },
+      { title: "Hire vetted freelancers — SkillSync" },
       {
         name: "description",
         content:

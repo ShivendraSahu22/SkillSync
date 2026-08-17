@@ -11,12 +11,12 @@ import { fetchMyBids, fetchMyProjects, formatBudget, timeAgo } from "@/lib/marke
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Your dashboard — Freelanceo" },
+      { title: "Your dashboard — SkillSync" },
       {
         name: "description",
         content: "Track the projects you posted and the proposals you sent in one workspace.",
       },
-      { property: "og:title", content: "Freelanceo dashboard" },
+      { property: "og:title", content: "SkillSync dashboard" },
       {
         property: "og:description",
         content: "Your posted projects and submitted proposals at a glance.",

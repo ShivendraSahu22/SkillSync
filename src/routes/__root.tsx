@@ -80,16 +80,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Freelanceo — freelance marketplace" },
+      { title: "SkillSync — freelance marketplace" },
       {
         name: "description",
         content:
           "Post projects, compare proposals and hire vetted freelancers across engineering, design, data and growth.",
       },
-      { property: "og:title", content: "Freelanceo — freelance marketplace" },
+      { property: "og:title", content: "SkillSync — freelance marketplace" },
       {
         property: "og:description",
-        content: "Hire freelancers or win great projects on Freelanceo.",
+        content: "Hire freelancers or win great projects on SkillSync.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -143,7 +143,7 @@ function RootComponent() {
           </main>
           <footer className="border-t border-border py-8">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 text-sm text-muted-foreground">
-              <p>© {new Date().getFullYear()} Freelanceo. A freelance marketplace demo.</p>
+              <p>© {new Date().getFullYear()} SkillSync. A freelance marketplace demo.</p>
               <nav className="flex gap-4">
                 <Link to="/projects" className="hover:text-foreground">
                   Find work

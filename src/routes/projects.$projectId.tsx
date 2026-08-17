@@ -23,7 +23,7 @@ import {
 export const Route = createFileRoute("/projects/$projectId")({
   head: () => ({
     meta: [
-      { title: "Project brief and bids — Freelanceo" },
+      { title: "Project brief and bids — SkillSync" },
       {
         name: "description",
         content:

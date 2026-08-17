@@ -11,13 +11,13 @@ import { CATEGORIES, fetchBidCounts, fetchProjects } from "@/lib/marketplace";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Freelanceo — Hire freelancers, win great projects" },
+      { title: "SkillSync — Hire freelancers, win great projects" },
       {
         name: "description",
         content:
-          "Freelanceo is a freelance marketplace: post a project, compare proposals, and hire vetted developers, designers and marketers.",
+          "SkillSync is a freelance marketplace: post a project, compare proposals, and hire vetted developers, designers and marketers.",
       },
-      { property: "og:title", content: "Freelanceo — freelance marketplace" },
+      { property: "og:title", content: "SkillSync — freelance marketplace" },
       {
         property: "og:description",
         content: "Post projects, submit proposals, hire vetted freelance talent.",
