@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FreelancersRouteImport } from './routes/freelancers'
+import { Route as PostProjectRouteImport } from './routes/post-project'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
 
@@ -25,9 +27,19 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FreelancersRoute = FreelancersRouteImport.update({
   id: '/freelancers',
   path: '/freelancers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PostProjectRoute = PostProjectRouteImport.update({
+  id: '/post-project',
+  path: '/post-project',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
@@ -44,14 +56,18 @@ const ProjectsProjectIdRoute = ProjectsProjectIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/post-project': typeof PostProjectRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/post-project': typeof PostProjectRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -59,21 +75,38 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/post-project': typeof PostProjectRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/freelancers' | '/projects/$projectId' | '/projects/'
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/freelancers'
+    | '/post-project'
+    | '/projects/$projectId'
+    | '/projects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/freelancers' | '/projects/$projectId' | '/projects'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/freelancers'
+    | '/post-project'
+    | '/projects/$projectId'
+    | '/projects'
   id:
     | '__root__'
     | '/'
     | '/auth'
+    | '/dashboard'
     | '/freelancers'
+    | '/post-project'
     | '/projects/$projectId'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -81,7 +114,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  DashboardRoute: typeof DashboardRoute
   FreelancersRoute: typeof FreelancersRoute
+  PostProjectRoute: typeof PostProjectRoute
   ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
@@ -102,11 +137,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/freelancers': {
       id: '/freelancers'
       path: '/freelancers'
       fullPath: '/freelancers'
       preLoaderRoute: typeof FreelancersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/post-project': {
+      id: '/post-project'
+      path: '/post-project'
+      fullPath: '/post-project'
+      preLoaderRoute: typeof PostProjectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/': {
@@ -129,7 +178,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  DashboardRoute: DashboardRoute,
   FreelancersRoute: FreelancersRoute,
+  PostProjectRoute: PostProjectRoute,
   ProjectsProjectIdRoute: ProjectsProjectIdRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }
