@@ -131,8 +131,33 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AuthProvider>
+        <div className="flex min-h-screen flex-col bg-background text-foreground">
+          <SiteHeader />
+          <main className="flex-1">
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </main>
+          <footer className="border-t border-border py-8">
+            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 text-sm text-muted-foreground">
+              <p>© {new Date().getFullYear()} Freelanceo. A freelance marketplace demo.</p>
+              <nav className="flex gap-4">
+                <Link to="/projects" className="hover:text-foreground">
+                  Find work
+                </Link>
+                <Link to="/freelancers" className="hover:text-foreground">
+                  Hire talent
+                </Link>
+                <Link to="/post-project" className="hover:text-foreground">
+                  Post a project
+                </Link>
+              </nav>
+            </div>
+          </footer>
+        </div>
+        <Toaster position="top-center" />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
+
