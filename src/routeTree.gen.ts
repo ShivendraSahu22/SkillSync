@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FreelancersRouteImport } from './routes/freelancers'
+import { Route as PostProjectRouteImport } from './routes/post-project'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
 
@@ -30,6 +31,11 @@ const FreelancersRoute = FreelancersRouteImport.update({
   path: '/freelancers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PostProjectRoute = PostProjectRouteImport.update({
+  id: '/post-project',
+  path: '/post-project',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/freelancers': typeof FreelancersRoute
+  '/post-project': typeof PostProjectRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/freelancers': typeof FreelancersRoute
+  '/post-project': typeof PostProjectRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -60,20 +68,33 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/freelancers': typeof FreelancersRoute
+  '/post-project': typeof PostProjectRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/freelancers' | '/projects/$projectId' | '/projects/'
+    | '/'
+    | '/auth'
+    | '/freelancers'
+    | '/post-project'
+    | '/projects/$projectId'
+    | '/projects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/freelancers' | '/projects/$projectId' | '/projects'
+  to:
+    | '/'
+    | '/auth'
+    | '/freelancers'
+    | '/post-project'
+    | '/projects/$projectId'
+    | '/projects'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/freelancers'
+    | '/post-project'
     | '/projects/$projectId'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -82,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   FreelancersRoute: typeof FreelancersRoute
+  PostProjectRoute: typeof PostProjectRoute
   ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
@@ -109,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FreelancersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/post-project': {
+      id: '/post-project'
+      path: '/post-project'
+      fullPath: '/post-project'
+      preLoaderRoute: typeof PostProjectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/': {
       id: '/projects/'
       path: '/projects'
@@ -130,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   FreelancersRoute: FreelancersRoute,
+  PostProjectRoute: PostProjectRoute,
   ProjectsProjectIdRoute: ProjectsProjectIdRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }
