@@ -1,4 +1,4 @@
-# Freelance Hub
+# SkillSync
 
 create a app clone of freelancer
 
