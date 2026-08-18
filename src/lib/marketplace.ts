@@ -38,6 +38,7 @@ export type Bid = {
   amount: number;
   delivery_days: number;
   proposal: string;
+  status: string;
   created_at: string;
 };
 
@@ -167,4 +168,37 @@ export function initials(name: string) {
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase() ?? "")
     .join("");
+}
+
+export type AccountRole = "student" | "organization";
+
+export type Submission = Bid & { status: string; reviewed_at: string | null };
+
+export async function fetchMyRole(userId: string): Promise<AccountRole | null> {
+  const { data, error } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId);
+  if (error) throw error;
+  const roles = (data ?? []).map((row) => row.role as AccountRole);
+  if (roles.includes("organization")) return "organization";
+  if (roles.includes("student")) return "student";
+  return null;
+}
+
+export async function fetchSubmissionsForMyProjects(userId: string) {
+  const { data, error } = await supabase
+    .from("bids")
+    .select("*, projects!inner(id, title, owner_id, status)")
+    .eq("projects.owner_id", userId)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as (Submission & {
+    projects: { id: string; title: string; owner_id: string | null; status: string } | null;
+  })[];
+}
+
+export async function reviewSubmission(bidId: string, status: "accepted" | "rejected") {
+  const { error } = await supabase.from("bids").update({ status }).eq("id", bidId);
+  if (error) throw error;
 }

@@ -28,10 +28,13 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+type Role = "student" | "organization";
+
 function AuthPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [mode, setMode] = useState<"login" | "signup">("login");
+  const [accountRole, setAccountRole] = useState<Role>("student");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -50,12 +53,19 @@ function AuthPage() {
           email,
           password,
           options: {
-            data: { display_name: name || email.split("@")[0] },
+            data: {
+              display_name: name || email.split("@")[0],
+              account_role: accountRole,
+            },
             emailRedirectTo: `${window.location.origin}/dashboard`,
           },
         });
         if (error) throw error;
-        toast.success("Account created. Welcome aboard!");
+        toast.success(
+          accountRole === "organization"
+            ? "Organization account created. You can post work now."
+            : "Student account created. Start completing tasks!",
+        );
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -76,7 +86,7 @@ function AuthPage() {
           {mode === "login" ? "Welcome back" : "Create your account"}
         </h1>
         <p className="mt-2 text-center text-sm text-muted-foreground">
-          One account for hiring talent and winning work.
+          Students complete tasks. Organizations post work and review submissions.
         </p>
 
         <div className="plate mt-8 p-6">
@@ -89,15 +99,55 @@ function AuthPage() {
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
             {mode === "signup" ? (
-              <div className="space-y-2">
-                <Label htmlFor="name">Display name</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  placeholder="Amara Osei"
-                />
-              </div>
+              <>
+                <div className="space-y-2">
+                  <Label>I am joining as</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {(
+                      [
+                        {
+                          value: "student" as Role,
+                          title: "Student",
+                          hint: "Browse tasks and submit work",
+                        },
+                        {
+                          value: "organization" as Role,
+                          title: "Organization",
+                          hint: "Post tasks and review submissions",
+                        },
+                      ]
+                    ).map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        aria-pressed={accountRole === option.value}
+                        onClick={() => setAccountRole(option.value)}
+                        className={`rounded-lg border p-3 text-left transition-colors ${
+                          accountRole === option.value
+                            ? "border-primary bg-secondary"
+                            : "border-border hover:bg-secondary/60"
+                        }`}
+                      >
+                        <span className="block text-sm font-semibold">{option.title}</span>
+                        <span className="mt-1 block text-xs text-muted-foreground">
+                          {option.hint}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="name">
+                    {accountRole === "organization" ? "Organization name" : "Display name"}
+                  </Label>
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder={accountRole === "organization" ? "Northwind Labs" : "Amara Osei"}
+                  />
+                </div>
+              </>
             ) : null}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

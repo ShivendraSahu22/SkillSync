@@ -17,6 +17,7 @@ import {
   fetchProject,
   formatBudget,
   initials,
+  reviewSubmission,
   timeAgo,
 } from "@/lib/marketplace";
 
@@ -41,7 +42,7 @@ export const Route = createFileRoute("/projects/$projectId")({
 
 function ProjectDetail() {
   const { projectId } = Route.useParams();
-  const { user, displayName } = useAuth();
+  const { user, displayName, isStudent, isOrganization, roleLoading } = useAuth();
   const queryClient = useQueryClient();
 
   const projectQuery = useQuery({
@@ -51,6 +52,7 @@ function ProjectDetail() {
   const bidsQuery = useQuery({
     queryKey: ["bids", projectId],
     queryFn: () => fetchBidsForProject(projectId),
+    enabled: Boolean(user),
   });
 
   const [amount, setAmount] = useState("");
@@ -81,8 +83,21 @@ function ProjectDetail() {
       toast.error(error instanceof Error ? error.message : "Could not submit bid"),
   });
 
+  const review = useMutation({
+    mutationFn: ({ bidId, status }: { bidId: string; status: "accepted" | "rejected" }) =>
+      reviewSubmission(bidId, status),
+    onSuccess: (_data, variables) => {
+      toast.success(variables.status === "accepted" ? "Submission accepted." : "Submission rejected.");
+      queryClient.invalidateQueries({ queryKey: ["bids", projectId] });
+      queryClient.invalidateQueries({ queryKey: ["org-submissions"] });
+    },
+    onError: (error) =>
+      toast.error(error instanceof Error ? error.message : "Could not update submission"),
+  });
+
   const project = projectQuery.data;
   const bids = bidsQuery.data ?? [];
+  const isOwner = Boolean(user && project && project.owner_id === user.id);
   const myBid = bids.find((bid) => bid.bidder_id === user?.id);
   const average = bids.length
     ? Math.round(bids.reduce((sum, bid) => sum + Number(bid.amount), 0) / bids.length)
@@ -157,7 +172,8 @@ function ProjectDetail() {
 
           <section className="mt-10">
             <h2 className="text-xl font-semibold">
-              Proposals <span className="text-muted-foreground">({bids.length})</span>
+              {isOwner ? "Submissions" : "Your submission"}{" "}
+              <span className="text-muted-foreground">({bids.length})</span>
             </h2>
             <div className="mt-4 space-y-3">
               {bids.map((bid) => (
@@ -178,11 +194,47 @@ function ProjectDetail() {
                     </div>
                   </div>
                   <p className="mt-3 text-sm text-muted-foreground">{bid.proposal}</p>
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <Badge
+                      variant={
+                        bid.status === "accepted"
+                          ? "default"
+                          : bid.status === "rejected"
+                            ? "destructive"
+                            : "outline"
+                      }
+                    >
+                      {bid.status}
+                    </Badge>
+                    {isOwner && isOrganization && bid.status === "pending" ? (
+                      <>
+                        <Button
+                          size="sm"
+                          disabled={review.isPending}
+                          onClick={() => review.mutate({ bidId: bid.id, status: "accepted" })}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          disabled={review.isPending}
+                          onClick={() => review.mutate({ bidId: bid.id, status: "rejected" })}
+                        >
+                          Reject
+                        </Button>
+                      </>
+                    ) : null}
+                  </div>
                 </div>
               ))}
               {bids.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  No proposals yet — be the first to bid.
+                  {isOwner
+                    ? "No submissions on this task yet."
+                    : user
+                      ? "You have not submitted work for this task yet."
+                      : "Sign in to see your submissions for this task."}
                 </p>
               ) : null}
             </div>
@@ -201,11 +253,17 @@ function ProjectDetail() {
             {!user ? (
               <div className="mt-4 space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  Log in to send a proposal to this client.
+                  Log in as a student to submit your work for this task.
                 </p>
                 <Button asChild className="w-full">
-                  <Link to="/auth">Log in to bid</Link>
+                  <Link to="/auth">Log in to submit</Link>
                 </Button>
+              </div>
+            ) : roleLoading ? (
+              <p className="mt-4 text-sm text-muted-foreground">Checking access…</p>
+            ) : !isStudent ? (
+              <div className="mt-4 rounded-lg border border-border bg-secondary/50 p-4 text-sm text-muted-foreground">
+                Organization accounts review submissions — only students can submit work.
               </div>
             ) : myBid ? (
               <div className="mt-4 rounded-lg border border-border bg-secondary/50 p-4 text-sm">
