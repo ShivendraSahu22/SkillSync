@@ -37,7 +37,7 @@ export const Route = createFileRoute("/post-project")({
 });
 
 function PostProject() {
-  const { user, displayName } = useAuth();
+  const { user, displayName, isOrganization, roleLoading } = useAuth();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -53,12 +53,31 @@ function PostProject() {
   if (!user) {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
-        <h1 className="text-2xl font-semibold">Sign in to post a project</h1>
+        <h1 className="text-2xl font-semibold">Sign in to post a task</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          You need an account so freelancers can send you proposals.
+          Only organization accounts can publish work for students.
         </p>
         <Button asChild className="mt-6">
           <Link to="/auth">Sign in or join free</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  if (roleLoading) {
+    return <div className="mx-auto max-w-md px-4 py-20 text-center text-muted-foreground">Checking access…</div>;
+  }
+
+  if (!isOrganization) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-20 text-center">
+        <h1 className="text-2xl font-semibold">Students can't post tasks</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Your account is a student account. You can browse open tasks and submit your work — posting
+          new tasks is reserved for organizations.
+        </p>
+        <Button asChild className="mt-6">
+          <Link to="/projects">Browse tasks</Link>
         </Button>
       </div>
     );
