@@ -38,6 +38,7 @@ export type Bid = {
   amount: number;
   delivery_days: number;
   proposal: string;
+  status: string;
   created_at: string;
 };
 
