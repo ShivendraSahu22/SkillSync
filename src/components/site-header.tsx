@@ -12,14 +12,25 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { initials } from "@/lib/marketplace";
 
-const NAV = [
-  { to: "/projects", label: "Find work" },
-  { to: "/freelancers", label: "Hire talent" },
-  { to: "/post-project", label: "Post a project" },
+const STUDENT_NAV = [
+  { to: "/projects", label: "Browse tasks" },
+  { to: "/dashboard", label: "My submissions" },
+] as const;
+
+const ORG_NAV = [
+  { to: "/projects", label: "Tasks" },
+  { to: "/freelancers", label: "Students" },
+  { to: "/post-project", label: "Post a task" },
+] as const;
+
+const GUEST_NAV = [
+  { to: "/projects", label: "Browse tasks" },
+  { to: "/freelancers", label: "Students" },
 ] as const;
 
 export function SiteHeader() {
-  const { user, displayName, signOut } = useAuth();
+  const { user, displayName, signOut, isOrganization, isStudent } = useAuth();
+  const NAV = user ? (isOrganization ? ORG_NAV : isStudent ? STUDENT_NAV : GUEST_NAV) : GUEST_NAV;
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -55,15 +66,26 @@ export function SiteHeader() {
                     {initials(displayName)}
                   </span>
                   <span className="hidden sm:inline">{displayName}</span>
+                  {isOrganization ? (
+                    <span className="hidden rounded bg-secondary px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:inline">
+                      Org
+                    </span>
+                  ) : isStudent ? (
+                    <span className="hidden rounded bg-secondary px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground sm:inline">
+                      Student
+                    </span>
+                  ) : null}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-44">
                 <DropdownMenuItem onClick={() => navigate({ to: "/dashboard" })}>
                   Dashboard
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate({ to: "/post-project" })}>
-                  Post a project
-                </DropdownMenuItem>
+                {isOrganization ? (
+                  <DropdownMenuItem onClick={() => navigate({ to: "/post-project" })}>
+                    Post a task
+                  </DropdownMenuItem>
+                ) : null}
                 <DropdownMenuItem
                   onClick={async () => {
                     await signOut();
