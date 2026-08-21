@@ -146,18 +146,18 @@ SkillSync currently provides authentication, student/organization roles, task di
 
 ## 👨‍💻 Developer
 
-**Shivendra Sahu**
-Built by: Shivendra Sahu,Shrajal Sahu, Sahil Sahu
-Built with: Lovable
+**Built by:** Shivendra Sahu, Shrajal Sahu, Sahil Sahu  
+**Built with:** [Lovable](https://lovable.dev)
 
-GitHub:
-https://github.com/ShivendraSahu22
-https://github.com/Sahil-Sahu-32
-https://github.com/Shrajal-sahu-18
+### GitHub
 
-Repository:
-https://github.com/ShivendraSahu22/SkillSync
+[Shivendra Sahu](https://github.com/ShivendraSahu22)  
+[Sahil Sahu](https://github.com/Sahil-Sahu-32)  
+[Shrajal Sahu](https://github.com/Shrajal-sahu-18)
 
+### Repository
+
+[SkillSync](https://github.com/ShivendraSahu22/SkillSync)
 ---
 
 ## ⭐ SkillSync
