@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Briefcase, LogOut, Menu } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { useState } from "react";
+
+import logoAsset from "@/assets/skillsync-logo.png.asset.json";
 
 import { Button } from "@/components/ui/button";
 import {
