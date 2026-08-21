@@ -16,40 +16,37 @@ export type Database = {
     Tables: {
       bids: {
         Row: {
-          amount: number
           bidder_id: string
           bidder_name: string
           created_at: string
-          delivery_days: number
           id: string
           project_id: string
           proposal: string
           reviewed_at: string | null
           status: string
+          submission_url: string | null
         }
         Insert: {
-          amount: number
           bidder_id: string
           bidder_name?: string
           created_at?: string
-          delivery_days?: number
           id?: string
           project_id: string
           proposal: string
           reviewed_at?: string | null
           status?: string
+          submission_url?: string | null
         }
         Update: {
-          amount?: number
           bidder_id?: string
           bidder_name?: string
           created_at?: string
-          delivery_days?: number
           id?: string
           project_id?: string
           proposal?: string
           reviewed_at?: string | null
           status?: string
+          submission_url?: string | null
         }
         Relationships: [
           {
@@ -114,47 +111,59 @@ export type Database = {
       }
       projects: {
         Row: {
-          budget_max: number
-          budget_min: number
-          budget_type: string
           category: string
           created_at: string
+          deadline: string | null
+          deliverable: string
           description: string
+          difficulty: string
+          evaluation_criteria: string
           id: string
           owner_id: string | null
           owner_name: string
+          requirements: string
+          reward: number
           skills: string[]
           status: string
+          submission_format: string
           title: string
           updated_at: string
         }
         Insert: {
-          budget_max?: number
-          budget_min?: number
-          budget_type?: string
           category?: string
           created_at?: string
+          deadline?: string | null
+          deliverable?: string
           description: string
+          difficulty?: string
+          evaluation_criteria?: string
           id?: string
           owner_id?: string | null
           owner_name?: string
+          requirements?: string
+          reward?: number
           skills?: string[]
           status?: string
+          submission_format?: string
           title: string
           updated_at?: string
         }
         Update: {
-          budget_max?: number
-          budget_min?: number
-          budget_type?: string
           category?: string
           created_at?: string
+          deadline?: string | null
+          deliverable?: string
           description?: string
+          difficulty?: string
+          evaluation_criteria?: string
           id?: string
           owner_id?: string | null
           owner_name?: string
+          requirements?: string
+          reward?: number
           skills?: string[]
           status?: string
+          submission_format?: string
           title?: string
           updated_at?: string
         }
