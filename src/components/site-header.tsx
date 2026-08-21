@@ -38,9 +38,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4">
         <Link to="/" className="flex items-center gap-2">
-          <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <Briefcase className="size-4" />
-          </span>
+          <img src={logoAsset.url} alt="SkillSync logo" className="size-9 object-contain" />
           <span className="font-display text-lg font-semibold tracking-tight">SkillSync</span>
         </Link>
 
