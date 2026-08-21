@@ -1,24 +1,167 @@
-# SkillSync
+# SkillSync 🚀
 
-create a app clone of freelancer
+### Skill-Based Task Marketplace for Students
 
-This project was built with [Lovable](https://lovable.dev).
+**SkillSync** connects students with real-world, skill-based tasks from organizations. Students can discover relevant tasks, submit their work, receive evaluations, earn rewards, and build practical experience.
 
-## Build with Lovable
+---
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/48fba992-6394-4c2a-be73-b837b804e1a5).
+## 🎯 Problem
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+Students often have theoretical knowledge but lack opportunities to gain **real-world experience** and demonstrate their practical skills.
 
-## Development
+Organizations also have smaller tasks that can be completed without hiring full-time employees.
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+SkillSync aims to bridge this gap by connecting **student skills with real-world tasks**.
 
+---
+
+## 🔄 User Flow
+
+### Student
+
+```text
+Register
+   ↓
+Select Skills
+   ↓
+Discover Tasks
+   ↓
+Select Task
+   ↓
+Submit Deliverable
+   ↓
+Organization Review
+   ↓
+Accepted / Rejected
+   ↓
+Build Experience
+```
+
+### Organization
+
+```text
+Register
+   ↓
+Post Task
+   ↓
+Define Requirements
+   ↓
+Receive Submissions
+   ↓
+Review
+   ↓
+Accept / Reject
+```
+
+---
+
+## 📁 Project Structure
+
+```text
+SkillSync/
+├── public/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   │   └── ui/
+│   ├── hooks/
+│   │   └── useAuth.tsx
+│   ├── integrations/
+│   │   └── supabase/
+│   ├── lib/
+│   │   └── marketplace.ts
+│   └── routes/
+│       ├── auth.tsx
+│       ├── dashboard.tsx
+│       ├── freelancers.tsx
+│       ├── post-project.tsx
+│       ├── projects.index.tsx
+│       └── projects.$projectId.tsx
+├── supabase/
+│   └── migrations/
+├── package.json
+├── vite.config.ts
+└── README.md
+```
+
+---
+
+## ⚙️ Installation
+
+### Requirements
+
+* Node.js
+* npm
+* Git
+* Supabase project
+
+### Setup
+
+```bash
+git clone https://github.com/ShivendraSahu22/SkillSync.git
+cd SkillSync
+npm install
+```
+
+Create environment variables:
+
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_key
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+### Useful Commands
+
+```bash
+npm run dev
+npm run build
+npm run preview
+npm run lint
+npm run format
+```
 ```sh
 git clone <this-repository-url>
 cd <repository-name>
 npm i
 npm run dev
 ```
+
+
+---
+
+## 📌 Project Status
+
+**MVP / Hackathon Prototype**
+
+SkillSync currently provides authentication, student/organization roles, task discovery, task posting, submissions, dashboards, and Supabase-backed marketplace functionality.
+
+---
+
+## 👨‍💻 Developer
+
+**Shivendra Sahu**
+Built by: Shivendra Sahu,Shrajal Sahu, Sahil Sahu
+Built with: Lovable
+
+GitHub:
+https://github.com/ShivendraSahu22
+https://github.com/Sahil-Sahu-32
+https://github.com/Shrajal-sahu-18
+
+Repository:
+https://github.com/ShivendraSahu22/SkillSync
+
+---
+
+## ⭐ SkillSync
+
+> **Learn Skills. Solve Real Problems. Build Your Future.**
+
+**SkillSync — Connecting Student Skills with Real-World Opportunities.**
