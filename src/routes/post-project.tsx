@@ -1,4 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -15,38 +17,54 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { CATEGORIES } from "@/lib/marketplace";
+import { CATEGORIES, DIFFICULTIES, type Difficulty } from "@/lib/marketplace";
+import { generateTask } from "@/lib/task-generator.functions";
 
 export const Route = createFileRoute("/post-project")({
   head: () => ({
     meta: [
-      { title: "Post a project — SkillSync" },
+      { title: "Post a student task — SkillSync" },
       {
         name: "description",
         content:
-          "Describe your project, set a budget and start receiving proposals from vetted freelancers within hours.",
+          "Publish a short, clearly scoped task with one deliverable, explicit evaluation criteria and a fixed reward.",
       },
-      { property: "og:title", content: "Post a project on SkillSync" },
+      { property: "og:title", content: "Post a student task on SkillSync" },
       {
         property: "og:description",
-        content: "Publish a brief and collect proposals from freelancers fast.",
+        content: "Small scoped tasks, one deliverable, fixed reward — no hourly work.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PostProject,
 });
 
+function defaultDeadline() {
+  const date = new Date();
+  date.setDate(date.getDate() + 7);
+  return date.toISOString().slice(0, 10);
+}
+
 function PostProject() {
   const { user, displayName, isOrganization, roleLoading } = useAuth();
   const navigate = useNavigate();
+  const draftTask = useServerFn(generateTask);
   const [submitting, setSubmitting] = useState(false);
+  const [drafting, setDrafting] = useState(false);
+  const [aiSkill, setAiSkill] = useState("");
   const [form, setForm] = useState({
     title: "",
     description: "",
     category: "Web Development",
-    budget_type: "fixed",
-    budget_min: "500",
-    budget_max: "1500",
+    difficulty: "Beginner" as Difficulty,
+    deliverable: "",
+    requirements: "",
+    evaluation_criteria: "",
+    submission_format: "Public link (GitHub / Drive / Figma)",
+    reward: "45",
+    deadline: defaultDeadline(),
     skills: "",
   });
 
@@ -65,7 +83,11 @@ function PostProject() {
   }
 
   if (roleLoading) {
-    return <div className="mx-auto max-w-md px-4 py-20 text-center text-muted-foreground">Checking access…</div>;
+    return (
+      <div className="mx-auto max-w-md px-4 py-20 text-center text-muted-foreground">
+        Checking access…
+      </div>
+    );
   }
 
   if (!isOrganization) {
@@ -83,6 +105,39 @@ function PostProject() {
     );
   }
 
+  async function onGenerate() {
+    if (!aiSkill.trim()) {
+      toast.error("Name the skill the task should focus on.");
+      return;
+    }
+    setDrafting(true);
+    try {
+      const draft = await draftTask({
+        data: { skill: aiSkill.trim(), difficulty: form.difficulty },
+      });
+      const deadline = new Date();
+      deadline.setDate(deadline.getDate() + draft.deadline_days);
+      setForm({
+        title: draft.title,
+        description: draft.description,
+        category: draft.category,
+        difficulty: draft.difficulty,
+        deliverable: draft.deliverable,
+        requirements: draft.requirements,
+        evaluation_criteria: draft.evaluation_criteria,
+        submission_format: draft.submission_format,
+        reward: String(draft.reward),
+        deadline: deadline.toISOString().slice(0, 10),
+        skills: draft.skills.join(", "),
+      });
+      toast.success("Draft ready — review and publish.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not draft a task");
+    } finally {
+      setDrafting(false);
+    }
+  }
+
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!user) return;
@@ -95,9 +150,13 @@ function PostProject() {
         title: form.title.trim(),
         description: form.description.trim(),
         category: form.category,
-        budget_type: form.budget_type,
-        budget_min: Number(form.budget_min) || 0,
-        budget_max: Number(form.budget_max) || Number(form.budget_min) || 0,
+        difficulty: form.difficulty,
+        deliverable: form.deliverable.trim(),
+        requirements: form.requirements.trim(),
+        evaluation_criteria: form.evaluation_criteria.trim(),
+        submission_format: form.submission_format.trim(),
+        reward: Number(form.reward) || 0,
+        deadline: form.deadline || null,
         skills: form.skills
           .split(",")
           .map((skill) => skill.trim())
@@ -111,38 +170,60 @@ function PostProject() {
       toast.error(error.message);
       return;
     }
-    toast.success("Project published");
+    toast.success("Task published");
     navigate({ to: "/projects/$projectId", params: { projectId: data.id } });
   }
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
-      <h1 className="text-3xl font-semibold sm:text-4xl">Post a project</h1>
+      <h1 className="text-3xl font-semibold sm:text-4xl">Post a task</h1>
       <p className="mt-2 text-muted-foreground">
-        A clear brief gets better proposals. Two minutes is all it takes.
+        Short, scoped, one deliverable. Rewards are fixed and based on difficulty and deliverable
+        quality — never on hours worked.
       </p>
 
-      <form onSubmit={onSubmit} className="plate mt-8 space-y-5 p-6">
+      <div className="plate mt-8 space-y-3 p-5">
+        <Label htmlFor="ai-skill" className="flex items-center gap-2">
+          <Sparkles className="size-4 text-primary" /> Draft a task from a skill
+        </Label>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Input
+            id="ai-skill"
+            value={aiSkill}
+            onChange={(event) => setAiSkill(event.target.value)}
+            placeholder="e.g. Figma auto-layout, pandas, React forms"
+          />
+          <Button type="button" variant="outline" onClick={onGenerate} disabled={drafting}>
+            {drafting ? "Drafting…" : "Generate draft"}
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Generates a single small task with one measurable deliverable, clear requirements,
+          evaluation criteria and a fixed reward.
+        </p>
+      </div>
+
+      <form onSubmit={onSubmit} className="plate mt-6 space-y-5 p-6">
         <div className="space-y-2">
-          <Label htmlFor="title">Project title</Label>
+          <Label htmlFor="title">Task title</Label>
           <Input
             id="title"
             required
             value={form.title}
             onChange={(event) => setForm({ ...form, title: event.target.value })}
-            placeholder="Build a Next.js marketing site"
+            placeholder="Build a responsive pricing section in React + Tailwind"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">Task description</Label>
           <Textarea
             id="description"
             required
-            rows={7}
+            rows={5}
             value={form.description}
             onChange={(event) => setForm({ ...form, description: event.target.value })}
-            placeholder="Goals, deliverables, timeline, anything a freelancer should know…"
+            placeholder="Objective and exact scope — what is in, what is out."
           />
         </div>
 
@@ -167,56 +248,109 @@ function PostProject() {
           </div>
 
           <div className="space-y-2">
-            <Label>Budget type</Label>
+            <Label>Difficulty level</Label>
             <Select
-              value={form.budget_type}
-              onValueChange={(value) => setForm({ ...form, budget_type: value })}
+              value={form.difficulty}
+              onValueChange={(value) => setForm({ ...form, difficulty: value as Difficulty })}
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="fixed">Fixed price</SelectItem>
-                <SelectItem value="hourly">Hourly rate</SelectItem>
+                {DIFFICULTIES.map((level) => (
+                  <SelectItem key={level} value={level}>
+                    {level}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="min">Budget from ($)</Label>
-            <Input
-              id="min"
-              type="number"
-              min="0"
-              value={form.budget_min}
-              onChange={(event) => setForm({ ...form, budget_min: event.target.value })}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="max">Budget to ($)</Label>
-            <Input
-              id="max"
-              type="number"
-              min="0"
-              value={form.budget_max}
-              onChange={(event) => setForm({ ...form, budget_max: event.target.value })}
-            />
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="skills">Skills (comma separated)</Label>
-          <Input
-            id="skills"
-            value={form.skills}
-            onChange={(event) => setForm({ ...form, skills: event.target.value })}
-            placeholder="React, TypeScript, Tailwind"
+          <Label htmlFor="deliverable">Deliverable</Label>
+          <Textarea
+            id="deliverable"
+            required
+            rows={3}
+            value={form.deliverable}
+            onChange={(event) => setForm({ ...form, deliverable: event.target.value })}
+            placeholder="One concrete, measurable output — e.g. one component file plus 2 screenshots."
           />
         </div>
 
+        <div className="space-y-2">
+          <Label htmlFor="requirements">Requirements</Label>
+          <Textarea
+            id="requirements"
+            required
+            rows={5}
+            value={form.requirements}
+            onChange={(event) => setForm({ ...form, requirements: event.target.value })}
+            placeholder={"- Use React and Tailwind only\n- Works at 375px and 1280px"}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="criteria">Evaluation criteria</Label>
+          <Textarea
+            id="criteria"
+            required
+            rows={5}
+            value={form.evaluation_criteria}
+            onChange={(event) => setForm({ ...form, evaluation_criteria: event.target.value })}
+            placeholder={"- Correctness (40%)\n- Code quality (30%)\n- Visual polish (30%)"}
+          />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="format">Submission format</Label>
+            <Input
+              id="format"
+              required
+              value={form.submission_format}
+              onChange={(event) => setForm({ ...form, submission_format: event.target.value })}
+              placeholder="GitHub link, PDF, Figma link…"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="reward">Fixed reward (USD)</Label>
+            <Input
+              id="reward"
+              type="number"
+              min="0"
+              required
+              value={form.reward}
+              onChange={(event) => setForm({ ...form, reward: event.target.value })}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="deadline">Submission deadline</Label>
+            <Input
+              id="deadline"
+              type="date"
+              required
+              value={form.deadline}
+              onChange={(event) => setForm({ ...form, deadline: event.target.value })}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="skills">Skill tags (comma separated)</Label>
+            <Input
+              id="skills"
+              value={form.skills}
+              onChange={(event) => setForm({ ...form, skills: event.target.value })}
+              placeholder="React, Tailwind CSS"
+            />
+          </div>
+        </div>
+
         <Button type="submit" className="w-full" disabled={submitting}>
-          {submitting ? "Publishing…" : "Publish project"}
+          {submitting ? "Publishing…" : "Publish task"}
         </Button>
       </form>
     </div>

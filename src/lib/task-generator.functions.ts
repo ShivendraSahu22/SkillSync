@@ -11,5 +11,9 @@ export const generateTask = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => schema.parse(data))
   .handler(async ({ data }) => {
     const { generateTaskDraft } = await import("./task-generator.server");
-    return generateTaskDraft(data);
+    return generateTaskDraft({
+      skill: data.skill,
+      difficulty: data.difficulty,
+      ...(data.notes ? { notes: data.notes } : {}),
+    });
   });
