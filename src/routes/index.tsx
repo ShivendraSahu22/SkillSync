@@ -31,7 +31,7 @@ const STEPS = [
   {
     icon: Search,
     title: "Post a brief",
-    body: "Describe the work, set a budget range and publish in under two minutes.",
+    body: "Describe one deliverable, set a fixed reward and publish in minutes.",
   },
   {
     icon: BadgeCheck,

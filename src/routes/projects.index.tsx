@@ -21,7 +21,7 @@ export const Route = createFileRoute("/projects/")({
       { property: "og:title", content: "Browse freelance projects" },
       {
         property: "og:description",
-        content: "Open projects from real clients, with budgets and bid counts.",
+        content: "Short scoped tasks with one deliverable, fixed rewards and clear evaluation criteria.",
       },
     ],
   }),
