@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, CalendarClock, MapPin, Wallet } from "lucide-react";
+import { ArrowLeft, CalendarDays, Gauge, Target, Wallet } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -15,7 +15,8 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   fetchBidsForProject,
   fetchProject,
-  formatBudget,
+  formatDeadline,
+  formatReward,
   initials,
   reviewSubmission,
   timeAgo,
@@ -24,21 +25,35 @@ import {
 export const Route = createFileRoute("/projects/$projectId")({
   head: () => ({
     meta: [
-      { title: "Project brief and bids — SkillSync" },
+      { title: "Task brief and submissions — SkillSync" },
       {
         name: "description",
         content:
-          "Read the full project brief, see what other freelancers are bidding and submit your own proposal.",
+          "Read the full task brief: deliverable, requirements, evaluation criteria, submission format, fixed reward and deadline.",
       },
-      { property: "og:title", content: "Project brief and bids" },
+      { property: "og:title", content: "Task brief and submissions" },
       {
         property: "og:description",
-        content: "Budget, required skills and live proposals for this freelance project.",
+        content: "One deliverable, clear evaluation criteria and a fixed reward.",
       },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ProjectDetail,
 });
+
+function Block({ title, body }: { title: string; body: string }) {
+  if (!body) return null;
+  return (
+    <div className="mt-6">
+      <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        {title}
+      </h2>
+      <div className="mt-2 whitespace-pre-line text-[15px] leading-relaxed">{body}</div>
+    </div>
+  );
+}
 
 function ProjectDetail() {
   const { projectId } = Route.useParams();
@@ -55,32 +70,30 @@ function ProjectDetail() {
     enabled: Boolean(user),
   });
 
-  const [amount, setAmount] = useState("");
-  const [days, setDays] = useState("7");
+  const [submissionUrl, setSubmissionUrl] = useState("");
   const [proposal, setProposal] = useState("");
 
-  const placeBid = useMutation({
+  const submitWork = useMutation({
     mutationFn: async () => {
-      if (!user) throw new Error("Please log in to place a bid.");
+      if (!user) throw new Error("Please log in to submit your work.");
       const { error } = await supabase.from("bids").insert({
         project_id: projectId,
         bidder_id: user.id,
         bidder_name: displayName,
-        amount: Number(amount),
-        delivery_days: Number(days),
+        submission_url: submissionUrl.trim(),
         proposal,
       });
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Bid submitted.");
-      setAmount("");
+      toast.success("Work submitted for review.");
+      setSubmissionUrl("");
       setProposal("");
       queryClient.invalidateQueries({ queryKey: ["bids", projectId] });
       queryClient.invalidateQueries({ queryKey: ["bid-counts"] });
     },
     onError: (error) =>
-      toast.error(error instanceof Error ? error.message : "Could not submit bid"),
+      toast.error(error instanceof Error ? error.message : "Could not submit work"),
   });
 
   const review = useMutation({
@@ -98,10 +111,7 @@ function ProjectDetail() {
   const project = projectQuery.data;
   const bids = bidsQuery.data ?? [];
   const isOwner = Boolean(user && project && project.owner_id === user.id);
-  const myBid = bids.find((bid) => bid.bidder_id === user?.id);
-  const average = bids.length
-    ? Math.round(bids.reduce((sum, bid) => sum + Number(bid.amount), 0) / bids.length)
-    : 0;
+  const mySubmission = bids.find((bid) => bid.bidder_id === user?.id);
 
   if (projectQuery.isLoading) {
     return (
@@ -114,9 +124,9 @@ function ProjectDetail() {
   if (!project) {
     return (
       <div className="mx-auto max-w-5xl px-4 py-20 text-center">
-        <h1 className="text-2xl font-semibold">Project not found</h1>
+        <h1 className="text-2xl font-semibold">Task not found</h1>
         <Button asChild variant="outline" className="mt-6">
-          <Link to="/projects">Back to projects</Link>
+          <Link to="/projects">Back to tasks</Link>
         </Button>
       </div>
     );
@@ -128,12 +138,15 @@ function ProjectDetail() {
         to="/projects"
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="size-4" /> All projects
+        <ArrowLeft className="size-4" /> All tasks
       </Link>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <article className="plate p-6">
-          <Badge variant="secondary">{project.category}</Badge>
+          <div className="flex flex-wrap gap-2">
+            <Badge variant="secondary">{project.category}</Badge>
+            <Badge variant="outline">{project.difficulty}</Badge>
+          </div>
           <h1 className="mt-3 text-3xl font-semibold leading-tight">{project.title}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Posted by {project.owner_name} · {timeAgo(project.created_at)}
@@ -142,14 +155,14 @@ function ProjectDetail() {
           <div className="mt-6 flex flex-wrap gap-6 border-y border-border py-4 text-sm">
             <span className="inline-flex items-center gap-2">
               <Wallet className="size-4 text-primary" />
-              <strong className="font-semibold">{formatBudget(project)}</strong>
+              <strong className="font-semibold">{formatReward(project.reward)}</strong>
             </span>
             <span className="inline-flex items-center gap-2 text-muted-foreground">
-              <CalendarClock className="size-4 text-primary" />
-              {project.budget_type === "hourly" ? "Hourly contract" : "Fixed price"}
+              <Gauge className="size-4 text-primary" /> {project.difficulty}
             </span>
             <span className="inline-flex items-center gap-2 text-muted-foreground">
-              <MapPin className="size-4 text-primary" /> Remote
+              <CalendarDays className="size-4 text-primary" /> Due{" "}
+              {formatDeadline(project.deadline)}
             </span>
           </div>
 
@@ -157,9 +170,14 @@ function ProjectDetail() {
             {project.description}
           </div>
 
+          <Block title="Deliverable" body={project.deliverable} />
+          <Block title="Requirements" body={project.requirements} />
+          <Block title="Evaluation criteria" body={project.evaluation_criteria} />
+          <Block title="Submission format" body={project.submission_format} />
+
           <div className="mt-6">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Skills required
+              Skill tags
             </h2>
             <div className="mt-2 flex flex-wrap gap-2">
               {project.skills.map((skill) => (
@@ -188,10 +206,16 @@ function ProjectDetail() {
                         <p className="text-xs text-muted-foreground">{timeAgo(bid.created_at)}</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-semibold">${Number(bid.amount).toLocaleString()}</p>
-                      <p className="text-xs text-muted-foreground">in {bid.delivery_days} days</p>
-                    </div>
+                    {bid.submission_url ? (
+                      <a
+                        href={bid.submission_url}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="text-sm font-medium text-primary underline"
+                      >
+                        Open deliverable
+                      </a>
+                    ) : null}
                   </div>
                   <p className="mt-3 text-sm text-muted-foreground">{bid.proposal}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -243,12 +267,10 @@ function ProjectDetail() {
 
         <aside className="space-y-4">
           <div className="plate p-5">
-            <h2 className="font-display text-lg font-semibold">Bid on this project</h2>
-            {average ? (
-              <p className="mt-1 text-sm text-muted-foreground">
-                Average bid so far: ${average.toLocaleString()}
-              </p>
-            ) : null}
+            <h2 className="font-display text-lg font-semibold">Submit your deliverable</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Fixed reward: {formatReward(project.reward)} · due {formatDeadline(project.deadline)}
+            </p>
 
             {!user ? (
               <div className="mt-4 space-y-3">
@@ -265,12 +287,11 @@ function ProjectDetail() {
               <div className="mt-4 rounded-lg border border-border bg-secondary/50 p-4 text-sm text-muted-foreground">
                 Organization accounts review submissions — only students can submit work.
               </div>
-            ) : myBid ? (
+            ) : mySubmission ? (
               <div className="mt-4 rounded-lg border border-border bg-secondary/50 p-4 text-sm">
-                <p className="font-medium">You already bid on this project.</p>
+                <p className="font-medium">You already submitted work for this task.</p>
                 <p className="mt-1 text-muted-foreground">
-                  ${Number(myBid.amount).toLocaleString()} in {myBid.delivery_days} days. Manage it
-                  from your dashboard.
+                  Status: {mySubmission.status}. Track it from your dashboard.
                 </p>
               </div>
             ) : (
@@ -278,56 +299,49 @@ function ProjectDetail() {
                 className="mt-4 space-y-3"
                 onSubmit={(event) => {
                   event.preventDefault();
-                  placeBid.mutate();
+                  submitWork.mutate();
                 }}
               >
                 <div className="space-y-2">
-                  <Label htmlFor="amount">Your price (USD)</Label>
+                  <Label htmlFor="url">Deliverable link</Label>
                   <Input
-                    id="amount"
-                    type="number"
-                    min={1}
+                    id="url"
+                    type="url"
                     required
-                    value={amount}
-                    onChange={(event) => setAmount(event.target.value)}
-                    placeholder="2400"
+                    value={submissionUrl}
+                    onChange={(event) => setSubmissionUrl(event.target.value)}
+                    placeholder="https://github.com/you/task-solution"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Expected format: {project.submission_format}
+                  </p>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="days">Delivery time (days)</Label>
-                  <Input
-                    id="days"
-                    type="number"
-                    min={1}
-                    required
-                    value={days}
-                    onChange={(event) => setDays(event.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="proposal">Proposal</Label>
+                  <Label htmlFor="proposal">Submission notes</Label>
                   <Textarea
                     id="proposal"
                     required
                     rows={5}
                     value={proposal}
                     onChange={(event) => setProposal(event.target.value)}
-                    placeholder="Why you're the right fit, and how you'd approach it."
+                    placeholder="What you built, how each requirement is met, anything to review first."
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={placeBid.isPending}>
-                  {placeBid.isPending ? "Submitting…" : "Submit bid"}
+                <Button type="submit" className="w-full" disabled={submitWork.isPending}>
+                  {submitWork.isPending ? "Submitting…" : "Submit work"}
                 </Button>
               </form>
             )}
           </div>
 
           <div className="plate p-5 text-sm text-muted-foreground">
-            <h3 className="font-display text-base font-semibold text-foreground">Bidding tips</h3>
+            <h3 className="font-display flex items-center gap-2 text-base font-semibold text-foreground">
+              <Target className="size-4 text-primary" /> Scoring tips
+            </h3>
             <ul className="mt-2 space-y-2">
-              <li>Reference a comparable project you shipped.</li>
-              <li>Break the budget into milestones.</li>
-              <li>Ask one sharp question about scope.</li>
+              <li>Match the deliverable exactly — nothing more, nothing less.</li>
+              <li>Walk through each requirement in your notes.</li>
+              <li>Make the link openable without a login request.</li>
             </ul>
           </div>
         </aside>

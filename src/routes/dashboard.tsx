@@ -11,7 +11,8 @@ import {
   fetchMyBids,
   fetchMyProjects,
   fetchSubmissionsForMyProjects,
-  formatBudget,
+  formatDeadline,
+  formatReward,
   initials,
   reviewSubmission,
   timeAgo,
@@ -150,9 +151,9 @@ function Dashboard() {
                     {project.description}
                   </p>
                   <p className="mt-3 text-sm font-medium">
-                    {formatBudget(project)}{" "}
+                    {formatReward(project.reward)}{" "}
                     <span className="font-normal text-muted-foreground">
-                      · posted {timeAgo(project.created_at)}
+                      · {project.difficulty} · due {formatDeadline(project.deadline)}
                     </span>
                   </p>
                 </Link>
@@ -190,10 +191,16 @@ function Dashboard() {
                   <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">
                     {submission.proposal}
                   </p>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    ${Number(submission.amount).toLocaleString()} · {submission.delivery_days} day
-                    delivery
-                  </p>
+                  {submission.submission_url ? (
+                    <a
+                      href={submission.submission_url}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="mt-2 inline-block text-sm font-medium text-primary underline"
+                    >
+                      Open deliverable
+                    </a>
+                  ) : null}
                   {submission.status === "pending" ? (
                     <div className="mt-4 flex gap-2">
                       <Button
@@ -247,8 +254,7 @@ function Dashboard() {
                 </div>
                 <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{bid.proposal}</p>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  ${Number(bid.amount).toLocaleString()} · {bid.delivery_days} day delivery · sent{" "}
-                  {timeAgo(bid.created_at)}
+                  Submitted {timeAgo(bid.created_at)}
                 </p>
               </Link>
             ))}

@@ -1,5 +1,9 @@
 import { supabase } from "@/integrations/supabase/client";
 
+export type Difficulty = "Beginner" | "Intermediate" | "Advanced";
+
+export const DIFFICULTIES: Difficulty[] = ["Beginner", "Intermediate", "Advanced"];
+
 export type Project = {
   id: string;
   owner_id: string | null;
@@ -7,12 +11,16 @@ export type Project = {
   title: string;
   description: string;
   category: string;
-  budget_type: string;
-  budget_min: number;
-  budget_max: number;
   skills: string[];
   status: string;
   created_at: string;
+  difficulty: Difficulty;
+  deliverable: string;
+  requirements: string;
+  evaluation_criteria: string;
+  submission_format: string;
+  reward: number;
+  deadline: string | null;
 };
 
 export type Profile = {
@@ -35,9 +43,8 @@ export type Bid = {
   project_id: string;
   bidder_id: string;
   bidder_name: string;
-  amount: number;
-  delivery_days: number;
   proposal: string;
+  submission_url: string | null;
   status: string;
   created_at: string;
 };
@@ -69,13 +76,13 @@ export async function fetchProjects(options?: { category?: string; search?: stri
 
   const { data, error } = await query;
   if (error) throw error;
-  return (data ?? []) as Project[];
+  return (data ?? []) as unknown as Project[];
 }
 
 export async function fetchProject(id: string) {
   const { data, error } = await supabase.from("projects").select("*").eq("id", id).maybeSingle();
   if (error) throw error;
-  return (data ?? null) as Project | null;
+  return (data ?? null) as unknown as Project | null;
 }
 
 export async function fetchFreelancers(options?: { search?: string; limit?: number }) {
@@ -109,7 +116,7 @@ export async function fetchBidsForProject(projectId: string) {
     .eq("project_id", projectId)
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return (data ?? []) as Bid[];
+  return (data ?? []) as unknown as Bid[];
 }
 
 export async function fetchBidCounts() {
@@ -129,7 +136,7 @@ export async function fetchMyBids(userId: string) {
     .eq("bidder_id", userId)
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return (data ?? []) as (Bid & { projects: { title: string; category: string; status: string } | null })[];
+  return (data ?? []) as unknown as (Bid & { projects: { title: string; category: string; status: string } | null })[];
 }
 
 export async function fetchMyProjects(userId: string) {
@@ -139,15 +146,17 @@ export async function fetchMyProjects(userId: string) {
     .eq("owner_id", userId)
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return (data ?? []) as Project[];
+  return (data ?? []) as unknown as Project[];
 }
 
-export function formatBudget(project: Pick<Project, "budget_type" | "budget_min" | "budget_max">) {
-  const suffix = project.budget_type === "hourly" ? "/hr" : "";
-  if (project.budget_min === project.budget_max) {
-    return `$${project.budget_min.toLocaleString()}${suffix}`;
-  }
-  return `$${project.budget_min.toLocaleString()} – $${project.budget_max.toLocaleString()}${suffix}`;
+export function formatReward(reward: number | string) {
+  return `$${Number(reward).toLocaleString()} fixed`;
+}
+
+export function formatDeadline(deadline: string | null) {
+  if (!deadline) return "No deadline";
+  const date = new Date(`${deadline}T00:00:00`);
+  return date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 }
 
 export function timeAgo(iso: string) {
@@ -193,7 +202,7 @@ export async function fetchSubmissionsForMyProjects(userId: string) {
     .eq("projects.owner_id", userId)
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return (data ?? []) as (Submission & {
+  return (data ?? []) as unknown as (Submission & {
     projects: { id: string; title: string; owner_id: string | null; status: string } | null;
   })[];
 }
