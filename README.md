@@ -3,7 +3,8 @@
 ## 🌐 Live Demo
 
 🚀 **Try SkillSync:** [Live Demo](https://skiillsync.lovable.app)
-<br>
+
+
 🚀 **See SkillSync PPT:** [PPT](https://drive.google.com/drive/folders/1waws28yi8hPBnunUd8Oo0V595dOrCleu)
 
 🚀 **Youtube Demo Video:** [SkillSync](https://youtu.be/B45qCGAMYlM)
