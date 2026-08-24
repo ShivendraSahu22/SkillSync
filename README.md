@@ -11,7 +11,7 @@
 
 Explore the SkillSync platform and experience the student task marketplace.
 
-
+ 
 ### Skill-Based Task Marketplace for Students
 
 **SkillSync** connects students with real-world, skill-based tasks from organizations. Students can discover relevant tasks, submit their work, receive evaluations, earn rewards, and build practical experience.
