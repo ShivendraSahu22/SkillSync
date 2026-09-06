@@ -65,19 +65,6 @@ function Dashboard() {
     enabled: Boolean(user) && isStudent,
   });
 
-  const review = useMutation({
-    mutationFn: ({ bidId, status }: { bidId: string; status: "accepted" | "rejected" }) =>
-      reviewSubmission(bidId, status),
-    onSuccess: (_data, variables) => {
-      toast.success(
-        variables.status === "accepted" ? "Submission accepted." : "Submission rejected.",
-      );
-      queryClient.invalidateQueries({ queryKey: ["org-submissions"] });
-      queryClient.invalidateQueries({ queryKey: ["bids"] });
-    },
-    onError: (error) =>
-      toast.error(error instanceof Error ? error.message : "Could not update submission"),
-  });
 
   if (!user) {
     return (
