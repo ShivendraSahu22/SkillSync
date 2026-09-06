@@ -1,8 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Briefcase, FileText } from "lucide-react";
-import { toast } from "sonner";
 
+import {
+  SubmissionReviewForm,
+  SubmissionReviewSummary,
+} from "@/components/submission-review-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,7 +17,6 @@ import {
   formatDeadline,
   formatReward,
   initials,
-  reviewSubmission,
   timeAgo,
 } from "@/lib/marketplace";
 
@@ -45,7 +47,7 @@ function statusVariant(status: string) {
 
 function Dashboard() {
   const { user, displayName, isOrganization, isStudent, roleLoading } = useAuth();
-  const queryClient = useQueryClient();
+  
 
   const projectsQuery = useQuery({
     queryKey: ["my-projects", user?.id],
@@ -65,19 +67,6 @@ function Dashboard() {
     enabled: Boolean(user) && isStudent,
   });
 
-  const review = useMutation({
-    mutationFn: ({ bidId, status }: { bidId: string; status: "accepted" | "rejected" }) =>
-      reviewSubmission(bidId, status),
-    onSuccess: (_data, variables) => {
-      toast.success(
-        variables.status === "accepted" ? "Submission accepted." : "Submission rejected.",
-      );
-      queryClient.invalidateQueries({ queryKey: ["org-submissions"] });
-      queryClient.invalidateQueries({ queryKey: ["bids"] });
-    },
-    onError: (error) =>
-      toast.error(error instanceof Error ? error.message : "Could not update submission"),
-  });
 
   if (!user) {
     return (
@@ -202,24 +191,10 @@ function Dashboard() {
                     </a>
                   ) : null}
                   {submission.status === "pending" ? (
-                    <div className="mt-4 flex gap-2">
-                      <Button
-                        size="sm"
-                        disabled={review.isPending}
-                        onClick={() => review.mutate({ bidId: submission.id, status: "accepted" })}
-                      >
-                        Accept
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={review.isPending}
-                        onClick={() => review.mutate({ bidId: submission.id, status: "rejected" })}
-                      >
-                        Reject
-                      </Button>
-                    </div>
-                  ) : null}
+                    <SubmissionReviewForm bidId={submission.id} />
+                  ) : (
+                    <SubmissionReviewSummary bid={submission} />
+                  )}
                 </article>
               ))}
             </div>
@@ -256,6 +231,7 @@ function Dashboard() {
                 <p className="mt-3 text-sm text-muted-foreground">
                   Submitted {timeAgo(bid.created_at)}
                 </p>
+                <SubmissionReviewSummary bid={bid} />
               </Link>
             ))}
           </div>

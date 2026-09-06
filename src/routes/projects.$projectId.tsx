@@ -4,6 +4,10 @@ import { ArrowLeft, CalendarDays, Gauge, Target, Wallet } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import {
+  SubmissionReviewForm,
+  SubmissionReviewSummary,
+} from "@/components/submission-review-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +22,6 @@ import {
   formatDeadline,
   formatReward,
   initials,
-  reviewSubmission,
   timeAgo,
 } from "@/lib/marketplace";
 
@@ -96,17 +99,6 @@ function ProjectDetail() {
       toast.error(error instanceof Error ? error.message : "Could not submit work"),
   });
 
-  const review = useMutation({
-    mutationFn: ({ bidId, status }: { bidId: string; status: "accepted" | "rejected" }) =>
-      reviewSubmission(bidId, status),
-    onSuccess: (_data, variables) => {
-      toast.success(variables.status === "accepted" ? "Submission accepted." : "Submission rejected.");
-      queryClient.invalidateQueries({ queryKey: ["bids", projectId] });
-      queryClient.invalidateQueries({ queryKey: ["org-submissions"] });
-    },
-    onError: (error) =>
-      toast.error(error instanceof Error ? error.message : "Could not update submission"),
-  });
 
   const project = projectQuery.data;
   const bids = bidsQuery.data ?? [];
@@ -230,26 +222,12 @@ function ProjectDetail() {
                     >
                       {bid.status}
                     </Badge>
-                    {isOwner && isOrganization && bid.status === "pending" ? (
-                      <>
-                        <Button
-                          size="sm"
-                          disabled={review.isPending}
-                          onClick={() => review.mutate({ bidId: bid.id, status: "accepted" })}
-                        >
-                          Accept
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={review.isPending}
-                          onClick={() => review.mutate({ bidId: bid.id, status: "rejected" })}
-                        >
-                          Reject
-                        </Button>
-                      </>
-                    ) : null}
                   </div>
+                  {isOwner && isOrganization && bid.status === "pending" ? (
+                    <SubmissionReviewForm bidId={bid.id} />
+                  ) : (
+                    <SubmissionReviewSummary bid={bid} />
+                  )}
                 </div>
               ))}
               {bids.length === 0 ? (
