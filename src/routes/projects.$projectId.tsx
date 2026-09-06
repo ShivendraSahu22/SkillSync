@@ -230,26 +230,12 @@ function ProjectDetail() {
                     >
                       {bid.status}
                     </Badge>
-                    {isOwner && isOrganization && bid.status === "pending" ? (
-                      <>
-                        <Button
-                          size="sm"
-                          disabled={review.isPending}
-                          onClick={() => review.mutate({ bidId: bid.id, status: "accepted" })}
-                        >
-                          Accept
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={review.isPending}
-                          onClick={() => review.mutate({ bidId: bid.id, status: "rejected" })}
-                        >
-                          Reject
-                        </Button>
-                      </>
-                    ) : null}
                   </div>
+                  {isOwner && isOrganization && bid.status === "pending" ? (
+                    <SubmissionReviewForm bidId={bid.id} />
+                  ) : (
+                    <SubmissionReviewSummary bid={bid} />
+                  )}
                 </div>
               ))}
               {bids.length === 0 ? (
