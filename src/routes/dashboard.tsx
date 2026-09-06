@@ -231,6 +231,7 @@ function Dashboard() {
                 <p className="mt-3 text-sm text-muted-foreground">
                   Submitted {timeAgo(bid.created_at)}
                 </p>
+                <SubmissionReviewSummary bid={bid} />
               </Link>
             ))}
           </div>
