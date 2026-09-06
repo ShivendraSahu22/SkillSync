@@ -19,10 +19,15 @@ export type Database = {
           bidder_id: string
           bidder_name: string
           created_at: string
+          decision: string | null
           id: string
           project_id: string
           proposal: string
           reviewed_at: string | null
+          reviewer_feedback: string | null
+          score_criteria: number | null
+          score_quality: number | null
+          score_requirements: number | null
           status: string
           submission_url: string | null
         }
@@ -30,10 +35,15 @@ export type Database = {
           bidder_id: string
           bidder_name?: string
           created_at?: string
+          decision?: string | null
           id?: string
           project_id: string
           proposal: string
           reviewed_at?: string | null
+          reviewer_feedback?: string | null
+          score_criteria?: number | null
+          score_quality?: number | null
+          score_requirements?: number | null
           status?: string
           submission_url?: string | null
         }
@@ -41,10 +51,15 @@ export type Database = {
           bidder_id?: string
           bidder_name?: string
           created_at?: string
+          decision?: string | null
           id?: string
           project_id?: string
           proposal?: string
           reviewed_at?: string | null
+          reviewer_feedback?: string | null
+          score_criteria?: number | null
+          score_quality?: number | null
+          score_requirements?: number | null
           status?: string
           submission_url?: string | null
         }
