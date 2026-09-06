@@ -189,24 +189,10 @@ function Dashboard() {
                     </a>
                   ) : null}
                   {submission.status === "pending" ? (
-                    <div className="mt-4 flex gap-2">
-                      <Button
-                        size="sm"
-                        disabled={review.isPending}
-                        onClick={() => review.mutate({ bidId: submission.id, status: "accepted" })}
-                      >
-                        Accept
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={review.isPending}
-                        onClick={() => review.mutate({ bidId: submission.id, status: "rejected" })}
-                      >
-                        Reject
-                      </Button>
-                    </div>
-                  ) : null}
+                    <SubmissionReviewForm bidId={submission.id} />
+                  ) : (
+                    <SubmissionReviewSummary bid={submission} />
+                  )}
                 </article>
               ))}
             </div>
