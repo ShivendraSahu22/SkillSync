@@ -47,7 +47,7 @@ function statusVariant(status: string) {
 
 function Dashboard() {
   const { user, displayName, isOrganization, isStudent, roleLoading } = useAuth();
-  const queryClient = useQueryClient();
+  
 
   const projectsQuery = useQuery({
     queryKey: ["my-projects", user?.id],
