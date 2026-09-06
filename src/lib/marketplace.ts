@@ -47,6 +47,12 @@ export type Bid = {
   submission_url: string | null;
   status: string;
   created_at: string;
+  decision: "pass" | "fail" | null;
+  score_requirements: number | null;
+  score_quality: number | null;
+  score_criteria: number | null;
+  reviewer_feedback: string | null;
+  reviewed_at?: string | null;
 };
 
 export const CATEGORIES = [
