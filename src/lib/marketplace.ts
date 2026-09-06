@@ -213,7 +213,53 @@ export async function fetchSubmissionsForMyProjects(userId: string) {
   })[];
 }
 
-export async function reviewSubmission(bidId: string, status: "accepted" | "rejected") {
-  const { error } = await supabase.from("bids").update({ status }).eq("id", bidId);
+export type ReviewInput = {
+  decision: "pass" | "fail";
+  score_requirements: number;
+  score_quality: number;
+  score_criteria: number;
+  reviewer_feedback: string;
+};
+
+export const RUBRIC_CRITERIA = [
+  {
+    key: "score_requirements" as const,
+    label: "Requirements met",
+    hint: "Every stated requirement is covered in the deliverable.",
+  },
+  {
+    key: "score_quality" as const,
+    label: "Deliverable quality",
+    hint: "Craft, correctness and polish of the submitted work.",
+  },
+  {
+    key: "score_criteria" as const,
+    label: "Evaluation criteria",
+    hint: "How well the work matches the task's evaluation criteria.",
+  },
+];
+
+export async function reviewSubmission(bidId: string, input: ReviewInput) {
+  const feedback = input.reviewer_feedback.trim();
+  if (feedback.length < 10) throw new Error("Please write at least 10 characters of feedback.");
+  if (feedback.length > 2000) throw new Error("Feedback must be under 2000 characters.");
+  for (const criterion of RUBRIC_CRITERIA) {
+    const value = input[criterion.key];
+    if (!Number.isInteger(value) || value < 1 || value > 5) {
+      throw new Error(`Score ${criterion.label} from 1 to 5.`);
+    }
+  }
+
+  const { error } = await supabase
+    .from("bids")
+    .update({
+      status: input.decision === "pass" ? "accepted" : "rejected",
+      decision: input.decision,
+      score_requirements: input.score_requirements,
+      score_quality: input.score_quality,
+      score_criteria: input.score_criteria,
+      reviewer_feedback: feedback,
+    } as never)
+    .eq("id", bidId);
   if (error) throw error;
 }
