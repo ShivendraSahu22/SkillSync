@@ -96,17 +96,6 @@ function ProjectDetail() {
       toast.error(error instanceof Error ? error.message : "Could not submit work"),
   });
 
-  const review = useMutation({
-    mutationFn: ({ bidId, status }: { bidId: string; status: "accepted" | "rejected" }) =>
-      reviewSubmission(bidId, status),
-    onSuccess: (_data, variables) => {
-      toast.success(variables.status === "accepted" ? "Submission accepted." : "Submission rejected.");
-      queryClient.invalidateQueries({ queryKey: ["bids", projectId] });
-      queryClient.invalidateQueries({ queryKey: ["org-submissions"] });
-    },
-    onError: (error) =>
-      toast.error(error instanceof Error ? error.message : "Could not update submission"),
-  });
 
   const project = projectQuery.data;
   const bids = bidsQuery.data ?? [];
