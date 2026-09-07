@@ -73,7 +73,7 @@ function Freelancers() {
               <div className="min-w-0">
                 <h2 className="truncate font-semibold">{profile.display_name}</h2>
                 <p className="text-sm text-muted-foreground">
-                  {profile.headline ?? "Freelance professional"}
+                  {profile.headline ?? "Student on SkillSync"}
                 </p>
               </div>
             </div>
@@ -90,21 +90,21 @@ function Freelancers() {
               ))}
             </div>
 
-            <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-sm">
+            <div className="mt-4 flex items-center justify-between gap-2 border-t border-border pt-3 text-sm">
               <span className="inline-flex items-center gap-1 text-muted-foreground">
                 <Star className="size-3.5 fill-accent text-accent" />
                 {profile.rating.toFixed(1)}
-                <span className="text-xs">({profile.reviews_count})</span>
+                <span className="text-xs">
+                  ({profile.reviews_count} reviewed {profile.reviews_count === 1 ? "task" : "tasks"})
+                </span>
               </span>
               {profile.location ? (
                 <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                   <MapPin className="size-3.5" /> {profile.location}
                 </span>
               ) : null}
-              {profile.hourly_rate ? (
-                <span className="font-semibold">${profile.hourly_rate}/hr</span>
-              ) : null}
             </div>
+
           </article>
         ))}
       </div>
