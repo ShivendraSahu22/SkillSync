@@ -11,17 +11,19 @@ import { fetchFreelancers, initials } from "@/lib/marketplace";
 export const Route = createFileRoute("/freelancers")({
   head: () => ({
     meta: [
-      { title: "Hire vetted freelancers — SkillSync" },
+      { title: "Student talent — SkillSync" },
       {
         name: "description",
         content:
-          "Browse freelance developers, designers, data engineers and marketers with ratings, rates and skill sets.",
+          "Browse students on SkillSync: their skills, study base and review scores from completed micro-tasks.",
       },
-      { property: "og:title", content: "Hire vetted freelancers" },
+      { property: "og:title", content: "Student talent on SkillSync" },
       {
         property: "og:description",
-        content: "Rates, ratings and skills for freelancers across every discipline.",
+        content: "Skills, study base and reviewed-task scores for students completing micro-tasks.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Freelancers,
@@ -37,11 +39,13 @@ function Freelancers() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <header>
-        <h1 className="text-3xl font-semibold sm:text-4xl">Hire talent</h1>
+        <h1 className="text-3xl font-semibold sm:text-4xl">Student talent</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          Specialists with track records, transparent rates and reviews from real engagements.
+          Students building a track record one reviewed task at a time — scored on the quality of
+          what they deliver, never on hours worked.
         </p>
       </header>
+
 
       <div className="relative mt-6 max-w-md">
         <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
