@@ -95,6 +95,7 @@ export async function fetchFreelancers(options?: { search?: string; limit?: numb
   let query = supabase
     .from("profiles")
     .select("*")
+    .eq("account_role", "student")
     .order("rating", { ascending: false })
     .limit(options?.limit ?? 60);
   if (options?.search) {
@@ -104,6 +105,7 @@ export async function fetchFreelancers(options?: { search?: string; limit?: numb
   if (error) throw error;
   return (data ?? []) as Profile[];
 }
+
 
 export async function fetchMyProfile(userId: string) {
   const { data, error } = await supabase

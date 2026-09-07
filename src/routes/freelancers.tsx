@@ -11,17 +11,19 @@ import { fetchFreelancers, initials } from "@/lib/marketplace";
 export const Route = createFileRoute("/freelancers")({
   head: () => ({
     meta: [
-      { title: "Hire vetted freelancers — SkillSync" },
+      { title: "Student talent — SkillSync" },
       {
         name: "description",
         content:
-          "Browse freelance developers, designers, data engineers and marketers with ratings, rates and skill sets.",
+          "Browse students on SkillSync: their skills, study base and review scores from completed micro-tasks.",
       },
-      { property: "og:title", content: "Hire vetted freelancers" },
+      { property: "og:title", content: "Student talent on SkillSync" },
       {
         property: "og:description",
-        content: "Rates, ratings and skills for freelancers across every discipline.",
+        content: "Skills, study base and reviewed-task scores for students completing micro-tasks.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Freelancers,
@@ -37,11 +39,13 @@ function Freelancers() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <header>
-        <h1 className="text-3xl font-semibold sm:text-4xl">Hire talent</h1>
+        <h1 className="text-3xl font-semibold sm:text-4xl">Student talent</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          Specialists with track records, transparent rates and reviews from real engagements.
+          Students building a track record one reviewed task at a time — scored on the quality of
+          what they deliver, never on hours worked.
         </p>
       </header>
+
 
       <div className="relative mt-6 max-w-md">
         <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -69,7 +73,7 @@ function Freelancers() {
               <div className="min-w-0">
                 <h2 className="truncate font-semibold">{profile.display_name}</h2>
                 <p className="text-sm text-muted-foreground">
-                  {profile.headline ?? "Freelance professional"}
+                  {profile.headline ?? "Student on SkillSync"}
                 </p>
               </div>
             </div>
@@ -86,21 +90,21 @@ function Freelancers() {
               ))}
             </div>
 
-            <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-sm">
+            <div className="mt-4 flex items-center justify-between gap-2 border-t border-border pt-3 text-sm">
               <span className="inline-flex items-center gap-1 text-muted-foreground">
                 <Star className="size-3.5 fill-accent text-accent" />
                 {profile.rating.toFixed(1)}
-                <span className="text-xs">({profile.reviews_count})</span>
+                <span className="text-xs">
+                  ({profile.reviews_count} reviewed {profile.reviews_count === 1 ? "task" : "tasks"})
+                </span>
               </span>
               {profile.location ? (
                 <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                   <MapPin className="size-3.5" /> {profile.location}
                 </span>
               ) : null}
-              {profile.hourly_rate ? (
-                <span className="font-semibold">${profile.hourly_rate}/hr</span>
-              ) : null}
             </div>
+
           </article>
         ))}
       </div>
