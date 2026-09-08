@@ -80,16 +80,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "SkillSync — freelance marketplace" },
+      { title: "SkillSync — student micro-task marketplace" },
       {
         name: "description",
         content:
-          "Post projects, compare proposals and hire vetted freelancers across engineering, design, data and growth.",
+          "Organizations post short scoped tasks; students deliver one measurable result and get reviewed against a clear rubric.",
       },
-      { property: "og:title", content: "SkillSync — freelance marketplace" },
+      { property: "og:title", content: "SkillSync — student micro-task marketplace" },
       {
         property: "og:description",
-        content: "Hire freelancers or win great projects on SkillSync.",
+        content: "Scoped tasks, one deliverable, fixed rewards and rubric-based reviews.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -143,7 +143,7 @@ function RootComponent() {
           </main>
           <footer className="border-t border-border py-8">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 text-sm text-muted-foreground">
-              <p>© {new Date().getFullYear()} SkillSync. A freelance marketplace demo.</p>
+              <p>© {new Date().getFullYear()} SkillSync. Scoped tasks, reviewed deliverables.</p>
               <nav className="flex gap-4">
                 <Link to="/projects" className="hover:text-foreground">
                   Find work

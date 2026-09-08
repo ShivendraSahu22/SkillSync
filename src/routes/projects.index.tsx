@@ -12,17 +12,20 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/projects/")({
   head: () => ({
     meta: [
-      { title: "Browse freelance projects — SkillSync" },
+      { title: "Browse student tasks — SkillSync" },
       {
         name: "description",
         content:
-          "Browse open freelance projects in development, design, data, marketing and video. Filter by category and place a bid in minutes.",
+          "Browse open student tasks in development, design, data, marketing and video. Filter by category, read the brief and submit your deliverable.",
       },
-      { property: "og:title", content: "Browse freelance projects" },
+      { property: "og:title", content: "Browse student tasks on SkillSync" },
       {
         property: "og:description",
-        content: "Short scoped tasks with one deliverable, fixed rewards and clear evaluation criteria.",
+        content:
+          "Short scoped tasks with one deliverable, fixed rewards and clear evaluation criteria.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: BrowseProjects,
@@ -41,10 +44,10 @@ function BrowseProjects() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <header>
-        <h1 className="text-3xl font-semibold sm:text-4xl">Find work</h1>
+        <h1 className="text-3xl font-semibold sm:text-4xl">Find tasks</h1>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          Every open project on the marketplace. Filter, read the brief, then send a bid with your
-          price and timeline.
+          Every open task on SkillSync. Filter, read the brief, then submit your finished
+          deliverable.
         </p>
       </header>
 
