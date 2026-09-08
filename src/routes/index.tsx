@@ -11,17 +11,20 @@ import { CATEGORIES, fetchBidCounts, fetchProjects } from "@/lib/marketplace";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SkillSync — Hire freelancers, win great projects" },
+      { title: "SkillSync — Student micro-tasks with real reviews" },
       {
         name: "description",
         content:
-          "SkillSync is a freelance marketplace: post a project, compare proposals, and hire vetted developers, designers and marketers.",
+          "SkillSync connects organizations and students through short, clearly scoped tasks: one deliverable, a fixed reward and rubric-based reviews.",
       },
-      { property: "og:title", content: "SkillSync — freelance marketplace" },
+      { property: "og:title", content: "SkillSync — student micro-task marketplace" },
       {
         property: "og:description",
-        content: "Post projects, submit proposals, hire vetted freelance talent.",
+        content:
+          "Post a scoped task, students submit one deliverable, you review it against a clear rubric.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
@@ -30,18 +33,18 @@ export const Route = createFileRoute("/")({
 const STEPS = [
   {
     icon: Search,
-    title: "Post a brief",
-    body: "Describe one deliverable, set a fixed reward and publish in minutes.",
+    title: "Post a task",
+    body: "Describe one deliverable, set requirements, criteria and a fixed reward.",
   },
   {
     icon: BadgeCheck,
-    title: "Compare proposals",
-    body: "Freelancers bid with pricing, delivery time and a tailored pitch.",
+    title: "Students submit work",
+    body: "Each student hands in a link to the finished deliverable plus short notes.",
   },
   {
     icon: Wallet,
-    title: "Hire and pay",
-    body: "Pick your specialist, agree milestones and keep everything in one thread.",
+    title: "Review and score",
+    body: "Pass or fail each submission with rubric scores and written feedback.",
   },
 ];
 

@@ -12,17 +12,19 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Log in or join — SkillSync marketplace" },
+      { title: "Log in or join — SkillSync" },
       {
         name: "description",
         content:
-          "Create a SkillSync account to post projects, bid on work and manage your freelance pipeline.",
+          "Create a SkillSync account as a student to complete tasks, or as an organization to post tasks and review submissions.",
       },
       { property: "og:title", content: "Log in or join SkillSync" },
       {
         property: "og:description",
-        content: "One account for hiring talent and winning freelance work.",
+        content: "One account for students completing tasks and organizations reviewing them.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AuthPage,
