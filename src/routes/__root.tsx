@@ -143,7 +143,7 @@ function RootComponent() {
           </main>
           <footer className="border-t border-border py-8">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 text-sm text-muted-foreground">
-              <p>© {new Date().getFullYear()} SkillSync. A freelance marketplace demo.</p>
+              <p>© {new Date().getFullYear()} SkillSync. Scoped tasks, reviewed deliverables.</p>
               <nav className="flex gap-4">
                 <Link to="/projects" className="hover:text-foreground">
                   Find work
