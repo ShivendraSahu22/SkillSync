@@ -60,14 +60,14 @@ function Index() {
       <section className="grid-canvas border-b border-border">
         <div className="mx-auto max-w-6xl px-4 py-20">
           <Badge variant="secondary" className="gap-1">
-            <ShieldCheck className="size-3.5" /> Vetted talent · transparent pricing
+            <ShieldCheck className="size-3.5" /> Scoped tasks · fixed rewards · real reviews
           </Badge>
           <h1 className="mt-6 max-w-3xl font-display text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
-            Hire the right freelancer. Win the right project.
+            Real tasks for students. Reviewed work for organizations.
           </h1>
           <p className="mt-5 max-w-xl text-lg text-muted-foreground">
-            A marketplace built for real work: clear briefs, honest bids and specialists across
-            engineering, design, data and growth.
+            Short, clearly scoped tasks with one measurable deliverable — graded on the quality of
+            what gets handed in, never on hours worked.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg">
