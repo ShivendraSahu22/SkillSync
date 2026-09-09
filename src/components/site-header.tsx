@@ -82,6 +82,16 @@ export function SiteHeader() {
                 <DropdownMenuItem onClick={() => navigate({ to: "/dashboard" })}>
                   Dashboard
                 </DropdownMenuItem>
+                {isStudent ? (
+                  <>
+                    <DropdownMenuItem onClick={() => navigate({ to: "/portal" })}>
+                      Student portal
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate({ to: "/profile" })}>
+                      My profile
+                    </DropdownMenuItem>
+                  </>
+                ) : null}
                 {isOrganization ? (
                   <DropdownMenuItem onClick={() => navigate({ to: "/post-project" })}>
                     Post a task
