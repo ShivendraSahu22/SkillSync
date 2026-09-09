@@ -215,6 +215,28 @@ export async function fetchSubmissionsForMyProjects(userId: string) {
   })[];
 }
 
+export async function submitDeliverable(input: {
+  projectId: string;
+  userId: string;
+  displayName: string;
+  submissionUrl: string;
+  proposal: string;
+}) {
+  const url = input.submissionUrl.trim();
+  const notes = input.proposal.trim();
+  if (!/^https?:\/\/\S+$/i.test(url)) throw new Error("Add a valid public link to your work.");
+  if (notes.length < 10) throw new Error("Add at least 10 characters of submission notes.");
+
+  const { error } = await supabase.from("bids").insert({
+    project_id: input.projectId,
+    bidder_id: input.userId,
+    bidder_name: input.displayName,
+    submission_url: url,
+    proposal: notes,
+  } as never);
+  if (error) throw error;
+}
+
 export type ReviewInput = {
   decision: "pass" | "fail";
   score_requirements: number;
