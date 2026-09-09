@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FreelancersRouteImport } from './routes/freelancers'
+import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PostProjectRouteImport } from './routes/post-project'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
 
@@ -37,9 +39,19 @@ const FreelancersRoute = FreelancersRouteImport.update({
   path: '/freelancers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PostProjectRoute = PostProjectRouteImport.update({
   id: '/post-project',
   path: '/post-project',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
@@ -58,7 +70,9 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
+  '/profile': typeof ProfileRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -67,7 +81,9 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
+  '/profile': typeof ProfileRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -77,7 +93,9 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
+  '/profile': typeof ProfileRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -88,7 +106,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/freelancers'
+    | '/portal'
     | '/post-project'
+    | '/profile'
     | '/projects/$projectId'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
@@ -97,7 +117,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/freelancers'
+    | '/portal'
     | '/post-project'
+    | '/profile'
     | '/projects/$projectId'
     | '/projects'
   id:
@@ -106,7 +128,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/freelancers'
+    | '/portal'
     | '/post-project'
+    | '/profile'
     | '/projects/$projectId'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -116,7 +140,9 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
   FreelancersRoute: typeof FreelancersRoute
+  PortalRoute: typeof PortalRoute
   PostProjectRoute: typeof PostProjectRoute
+  ProfileRoute: typeof ProfileRoute
   ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
@@ -151,11 +177,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FreelancersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/post-project': {
       id: '/post-project'
       path: '/post-project'
       fullPath: '/post-project'
       preLoaderRoute: typeof PostProjectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/': {
@@ -180,7 +220,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
   FreelancersRoute: FreelancersRoute,
+  PortalRoute: PortalRoute,
   PostProjectRoute: PostProjectRoute,
+  ProfileRoute: ProfileRoute,
   ProjectsProjectIdRoute: ProjectsProjectIdRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }

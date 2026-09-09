@@ -15,8 +15,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { initials } from "@/lib/marketplace";
 
 const STUDENT_NAV = [
+  { to: "/portal", label: "Student portal" },
   { to: "/projects", label: "Browse tasks" },
-  { to: "/dashboard", label: "My submissions" },
+  { to: "/profile", label: "My profile" },
 ] as const;
 
 const ORG_NAV = [
