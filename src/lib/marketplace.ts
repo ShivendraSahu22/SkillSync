@@ -172,6 +172,16 @@ export async function fetchMyProfile(userId: string) {
   return (data ?? null) as Profile | null;
 }
 
+export async function fetchProfileByUserId(userId: string) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (error) throw error;
+  return (data ?? null) as Profile | null;
+}
+
 export async function fetchBidsForProject(projectId: string) {
   const { data, error } = await supabase
     .from("bids")
