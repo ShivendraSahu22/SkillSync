@@ -74,6 +74,13 @@ function ProjectDetail() {
     enabled: Boolean(user),
   });
 
+  const ownerId = projectQuery.data?.owner_id ?? null;
+  const ownerQuery = useQuery({
+    queryKey: ["owner-profile", ownerId],
+    queryFn: () => fetchProfileByUserId(ownerId!),
+    enabled: Boolean(ownerId),
+  });
+
   const [submissionUrl, setSubmissionUrl] = useState("");
   const [proposal, setProposal] = useState("");
 
