@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FreelancersRouteImport } from './routes/freelancers'
+import { Route as OrgProfileRouteImport } from './routes/org-profile'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PostProjectRouteImport } from './routes/post-project'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -37,6 +38,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const FreelancersRoute = FreelancersRouteImport.update({
   id: '/freelancers',
   path: '/freelancers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrgProfileRoute = OrgProfileRouteImport.update({
+  id: '/org-profile',
+  path: '/org-profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortalRoute = PortalRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/org-profile': typeof OrgProfileRoute
   '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
   '/profile': typeof ProfileRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/org-profile': typeof OrgProfileRoute
   '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
   '/profile': typeof ProfileRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/org-profile': typeof OrgProfileRoute
   '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
   '/profile': typeof ProfileRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/freelancers'
+    | '/org-profile'
     | '/portal'
     | '/post-project'
     | '/profile'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/freelancers'
+    | '/org-profile'
     | '/portal'
     | '/post-project'
     | '/profile'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/freelancers'
+    | '/org-profile'
     | '/portal'
     | '/post-project'
     | '/profile'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
   FreelancersRoute: typeof FreelancersRoute
+  OrgProfileRoute: typeof OrgProfileRoute
   PortalRoute: typeof PortalRoute
   PostProjectRoute: typeof PostProjectRoute
   ProfileRoute: typeof ProfileRoute
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/freelancers'
       fullPath: '/freelancers'
       preLoaderRoute: typeof FreelancersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/org-profile': {
+      id: '/org-profile'
+      path: '/org-profile'
+      fullPath: '/org-profile'
+      preLoaderRoute: typeof OrgProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portal': {
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
   FreelancersRoute: FreelancersRoute,
+  OrgProfileRoute: OrgProfileRoute,
   PortalRoute: PortalRoute,
   PostProjectRoute: PostProjectRoute,
   ProfileRoute: ProfileRoute,

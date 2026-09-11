@@ -24,6 +24,7 @@ const ORG_NAV = [
   { to: "/projects", label: "Tasks" },
   { to: "/freelancers", label: "Students" },
   { to: "/post-project", label: "Post a task" },
+  { to: "/org-profile", label: "Organization" },
 ] as const;
 
 const GUEST_NAV = [
