@@ -78,6 +78,8 @@ export type Database = {
           account_role: string
           avatar_url: string | null
           bio: string | null
+          contact_email: string | null
+          contact_phone: string | null
           created_at: string
           display_name: string
           headline: string | null
@@ -89,11 +91,14 @@ export type Database = {
           skills: string[]
           updated_at: string
           user_id: string | null
+          website: string | null
         }
         Insert: {
           account_role?: string
           avatar_url?: string | null
           bio?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
           created_at?: string
           display_name?: string
           headline?: string | null
@@ -105,11 +110,14 @@ export type Database = {
           skills?: string[]
           updated_at?: string
           user_id?: string | null
+          website?: string | null
         }
         Update: {
           account_role?: string
           avatar_url?: string | null
           bio?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
           created_at?: string
           display_name?: string
           headline?: string | null
@@ -121,6 +129,7 @@ export type Database = {
           skills?: string[]
           updated_at?: string
           user_id?: string | null
+          website?: string | null
         }
         Relationships: []
       }
