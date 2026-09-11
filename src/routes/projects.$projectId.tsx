@@ -18,6 +18,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import {
   fetchBidsForProject,
+  fetchProfileByUserId,
   fetchProject,
   formatDeadline,
   formatReward,
@@ -71,6 +72,13 @@ function ProjectDetail() {
     queryKey: ["bids", projectId],
     queryFn: () => fetchBidsForProject(projectId),
     enabled: Boolean(user),
+  });
+
+  const ownerId = projectQuery.data?.owner_id ?? null;
+  const ownerQuery = useQuery({
+    queryKey: ["owner-profile", ownerId],
+    queryFn: () => fetchProfileByUserId(ownerId!),
+    enabled: Boolean(ownerId),
   });
 
   const [submissionUrl, setSubmissionUrl] = useState("");
@@ -311,6 +319,48 @@ function ProjectDetail() {
               </form>
             )}
           </div>
+
+          {owner ? (
+            <div className="plate p-5 text-sm text-muted-foreground">
+              <h3 className="font-display flex items-center gap-2 text-base font-semibold text-foreground">
+                <Building2 className="size-4 text-primary" /> Who posted this
+              </h3>
+              <p className="mt-2 font-medium text-foreground">{owner.display_name}</p>
+              {owner.headline ? <p className="mt-1">{owner.headline}</p> : null}
+              {owner.bio ? <p className="mt-2 whitespace-pre-line">{owner.bio}</p> : null}
+              <ul className="mt-3 space-y-1">
+                {owner.location ? <li>{owner.location}</li> : null}
+                {owner.contact_email ? (
+                  <li>
+                    <a
+                      href={`mailto:${owner.contact_email}`}
+                      className="text-primary hover:underline"
+                    >
+                      {owner.contact_email}
+                    </a>
+                  </li>
+                ) : null}
+                {owner.contact_phone ? <li>{owner.contact_phone}</li> : null}
+                {owner.website ? (
+                  <li>
+                    <a
+                      href={owner.website}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="text-primary hover:underline"
+                    >
+                      {owner.website.replace(/^https?:\/\//, "")}
+                    </a>
+                  </li>
+                ) : null}
+              </ul>
+              {isOwner ? (
+                <Button asChild variant="outline" size="sm" className="mt-4">
+                  <Link to="/org-profile">Edit these details</Link>
+                </Button>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="plate p-5 text-sm text-muted-foreground">
             <h3 className="font-display flex items-center gap-2 text-base font-semibold text-foreground">

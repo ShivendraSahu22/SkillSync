@@ -24,6 +24,7 @@ const ORG_NAV = [
   { to: "/projects", label: "Tasks" },
   { to: "/freelancers", label: "Students" },
   { to: "/post-project", label: "Post a task" },
+  { to: "/org-profile", label: "Organization" },
 ] as const;
 
 const GUEST_NAV = [
@@ -93,9 +94,14 @@ export function SiteHeader() {
                   </>
                 ) : null}
                 {isOrganization ? (
-                  <DropdownMenuItem onClick={() => navigate({ to: "/post-project" })}>
-                    Post a task
-                  </DropdownMenuItem>
+                  <>
+                    <DropdownMenuItem onClick={() => navigate({ to: "/post-project" })}>
+                      Post a task
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate({ to: "/org-profile" })}>
+                      Organization profile
+                    </DropdownMenuItem>
+                  </>
                 ) : null}
                 <DropdownMenuItem
                   onClick={async () => {
