@@ -94,9 +94,14 @@ export function SiteHeader() {
                   </>
                 ) : null}
                 {isOrganization ? (
-                  <DropdownMenuItem onClick={() => navigate({ to: "/post-project" })}>
-                    Post a task
-                  </DropdownMenuItem>
+                  <>
+                    <DropdownMenuItem onClick={() => navigate({ to: "/post-project" })}>
+                      Post a task
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate({ to: "/org-profile" })}>
+                      Organization profile
+                    </DropdownMenuItem>
+                  </>
                 ) : null}
                 <DropdownMenuItem
                   onClick={async () => {
