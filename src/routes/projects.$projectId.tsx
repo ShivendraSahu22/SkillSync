@@ -18,6 +18,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import {
   fetchBidsForProject,
+  fetchProfileByUserId,
   fetchProject,
   formatDeadline,
   formatReward,
