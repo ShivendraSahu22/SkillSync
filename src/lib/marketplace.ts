@@ -36,7 +36,62 @@ export type Profile = {
   rating: number;
   reviews_count: number;
   account_role: string;
+  contact_email: string | null;
+  contact_phone: string | null;
+  website: string | null;
 };
+
+export type OrganizationProfileInput = {
+  display_name: string;
+  headline: string;
+  bio: string;
+  location: string;
+  contact_email: string;
+  contact_phone: string;
+  website: string;
+};
+
+export async function saveOrganizationProfile(userId: string, input: OrganizationProfileInput) {
+  const name = input.display_name.trim();
+  const email = input.contact_email.trim();
+  const website = input.website.trim();
+
+  if (name.length < 2) throw new Error("Add your organization name.");
+  if (name.length > 100) throw new Error("Organization name must be under 100 characters.");
+  if (input.headline.trim().length > 160) throw new Error("Tagline must be under 160 characters.");
+  if (input.bio.trim().length > 1500) throw new Error("Description must be under 1500 characters.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw new Error("Add a valid contact email so students can reach you.");
+  }
+  if (input.contact_phone.trim().length > 40) throw new Error("Phone number looks too long.");
+  if (website && !/^https?:\/\/\S+$/i.test(website)) {
+    throw new Error("Website must start with http:// or https://");
+  }
+
+  const payload = {
+    user_id: userId,
+    display_name: name,
+    account_role: "organization",
+    headline: input.headline.trim() || null,
+    bio: input.bio.trim() || null,
+    location: input.location.trim() || null,
+    contact_email: email,
+    contact_phone: input.contact_phone.trim() || null,
+    website: website || null,
+  };
+
+  const existing = await fetchMyProfile(userId);
+  if (existing) {
+    const { error } = await supabase
+      .from("profiles")
+      .update(payload as never)
+      .eq("user_id", userId);
+    if (error) throw error;
+    return;
+  }
+  const { error } = await supabase.from("profiles").insert(payload as never);
+  if (error) throw error;
+}
 
 export type Bid = {
   id: string;
