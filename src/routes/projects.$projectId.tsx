@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, CalendarDays, Gauge, Target, Wallet } from "lucide-react";
+import { ArrowLeft, Building2, CalendarDays, Gauge, Target, Wallet } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
