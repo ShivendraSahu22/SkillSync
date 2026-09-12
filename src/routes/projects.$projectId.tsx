@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, CalendarDays, Gauge, Target, Wallet } from "lucide-react";
+import { ArrowLeft, Building2, CalendarDays, Gauge, Target, Wallet } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -111,6 +111,7 @@ function ProjectDetail() {
   const project = projectQuery.data;
   const bids = bidsQuery.data ?? [];
   const isOwner = Boolean(user && project && project.owner_id === user.id);
+  const owner = ownerQuery.data;
   const mySubmission = bids.find((bid) => bid.bidder_id === user?.id);
 
   if (projectQuery.isLoading) {
