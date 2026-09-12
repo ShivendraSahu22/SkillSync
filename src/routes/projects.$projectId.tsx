@@ -111,6 +111,7 @@ function ProjectDetail() {
   const project = projectQuery.data;
   const bids = bidsQuery.data ?? [];
   const isOwner = Boolean(user && project && project.owner_id === user.id);
+  const owner = ownerQuery.data;
   const mySubmission = bids.find((bid) => bid.bidder_id === user?.id);
 
   if (projectQuery.isLoading) {
