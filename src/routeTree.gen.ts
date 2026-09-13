@@ -17,6 +17,7 @@ import { Route as OrgProfileRouteImport } from './routes/org-profile'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PostProjectRouteImport } from './routes/post-project'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as StudentSignupRouteImport } from './routes/student-signup'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
 
@@ -60,6 +61,11 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentSignupRoute = StudentSignupRouteImport.update({
+  id: '/student-signup',
+  path: '/student-signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
   '/profile': typeof ProfileRoute
+  '/student-signup': typeof StudentSignupRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
   '/profile': typeof ProfileRoute
+  '/student-signup': typeof StudentSignupRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
   '/profile': typeof ProfileRoute
+  '/student-signup': typeof StudentSignupRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/post-project'
     | '/profile'
+    | '/student-signup'
     | '/projects/$projectId'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/post-project'
     | '/profile'
+    | '/student-signup'
     | '/projects/$projectId'
     | '/projects'
   id:
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/post-project'
     | '/profile'
+    | '/student-signup'
     | '/projects/$projectId'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   PortalRoute: typeof PortalRoute
   PostProjectRoute: typeof PostProjectRoute
   ProfileRoute: typeof ProfileRoute
+  StudentSignupRoute: typeof StudentSignupRoute
   ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
@@ -218,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/student-signup': {
+      id: '/student-signup'
+      path: '/student-signup'
+      fullPath: '/student-signup'
+      preLoaderRoute: typeof StudentSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/': {
       id: '/projects/'
       path: '/projects'
@@ -244,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortalRoute: PortalRoute,
   PostProjectRoute: PostProjectRoute,
   ProfileRoute: ProfileRoute,
+  StudentSignupRoute: StudentSignupRoute,
   ProjectsProjectIdRoute: ProjectsProjectIdRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }
