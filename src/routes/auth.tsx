@@ -178,6 +178,13 @@ function AuthPage() {
               {busy ? "Please wait…" : mode === "login" ? "Log in" : "Create account"}
             </Button>
           </form>
+
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            Are you a student?{" "}
+            <Link to="/student-signup" className="font-medium text-foreground underline">
+              Use the student sign-up
+            </Link>
+          </p>
         </div>
       </div>
     </div>
