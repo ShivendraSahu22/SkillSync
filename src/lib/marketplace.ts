@@ -93,6 +93,50 @@ export async function saveOrganizationProfile(userId: string, input: Organizatio
   if (error) throw error;
 }
 
+export type StudentProfileInput = {
+  display_name: string;
+  headline: string;
+  bio: string;
+  location: string;
+  skills: string;
+};
+
+export async function saveStudentProfile(userId: string, input: StudentProfileInput) {
+  const name = input.display_name.trim();
+  if (name.length < 2) throw new Error("Add your full name.");
+  if (name.length > 100) throw new Error("Name must be under 100 characters.");
+  if (input.headline.trim().length > 160) throw new Error("Headline must be under 160 characters.");
+  if (input.bio.trim().length > 1500) throw new Error("About must be under 1500 characters.");
+
+  const skills = input.skills
+    .split(",")
+    .map((skill) => skill.trim())
+    .filter(Boolean)
+    .slice(0, 15);
+
+  const payload = {
+    user_id: userId,
+    display_name: name,
+    account_role: "student",
+    headline: input.headline.trim() || null,
+    bio: input.bio.trim() || null,
+    location: input.location.trim() || null,
+    skills,
+  };
+
+  const existing = await fetchMyProfile(userId);
+  if (existing) {
+    const { error } = await supabase
+      .from("profiles")
+      .update(payload as never)
+      .eq("user_id", userId);
+    if (error) throw error;
+    return;
+  }
+  const { error } = await supabase.from("profiles").insert(payload as never);
+  if (error) throw error;
+}
+
 export type Bid = {
   id: string;
   project_id: string;
