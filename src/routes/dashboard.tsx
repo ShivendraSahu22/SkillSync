@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Briefcase, FileText } from "lucide-react";
+import { Briefcase, CheckCircle2, Clock, FileText, Sparkles, Star } from "lucide-react";
 
 import {
   SubmissionReviewForm,
@@ -13,10 +13,12 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   fetchMyBids,
   fetchMyProjects,
+  fetchProjects,
   fetchSubmissionsForMyProjects,
   formatDeadline,
   formatReward,
   initials,
+  RUBRIC_CRITERIA,
   timeAgo,
 } from "@/lib/marketplace";
 
@@ -46,7 +48,8 @@ function statusVariant(status: string) {
 }
 
 function Dashboard() {
-  const { user, displayName, isOrganization, isStudent, roleLoading } = useAuth();
+  const { user, displayName, isOrganization, roleLoading } = useAuth();
+
   
 
   const projectsQuery = useQuery({
@@ -61,11 +64,6 @@ function Dashboard() {
     enabled: Boolean(user) && isOrganization,
   });
 
-  const bidsQuery = useQuery({
-    queryKey: ["my-bids", user?.id],
-    queryFn: () => fetchMyBids(user!.id),
-    enabled: Boolean(user) && isStudent,
-  });
 
 
   if (!user) {
@@ -201,42 +199,181 @@ function Dashboard() {
           </section>
         </div>
       ) : (
-        <section className="mt-10">
-          <h2 className="flex items-center gap-2 text-lg font-semibold">
-            <FileText className="size-4 text-primary" /> Work you submitted
-          </h2>
-          <div className="mt-4 grid gap-3 md:grid-cols-2">
-            {bidsQuery.isLoading ? <Skeleton className="h-28 rounded-xl" /> : null}
-            {bidsQuery.data?.length === 0 ? (
-              <p className="plate p-5 text-sm text-muted-foreground">
-                No submissions yet.{" "}
-                <Link to="/projects" className="text-primary underline">
-                  Browse open tasks
-                </Link>
-                .
-              </p>
-            ) : null}
-            {bidsQuery.data?.map((bid) => (
-              <Link
-                key={bid.id}
-                to="/projects/$projectId"
-                params={{ projectId: bid.project_id }}
-                className="plate block p-5 transition-colors hover:border-primary/40"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <h3 className="font-semibold">{bid.projects?.title ?? "Task"}</h3>
-                  <Badge variant={statusVariant(bid.status)}>{bid.status}</Badge>
-                </div>
-                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{bid.proposal}</p>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Submitted {timeAgo(bid.created_at)}
-                </p>
-                <SubmissionReviewSummary bid={bid} />
-              </Link>
-            ))}
-          </div>
-        </section>
+        <StudentSections userId={user.id} />
       )}
+    </div>
+  );
+}
+
+function StudentSections({ userId }: { userId: string }) {
+  const bidsQuery = useQuery({
+    queryKey: ["my-bids", userId],
+    queryFn: () => fetchMyBids(userId),
+  });
+
+  const openTasksQuery = useQuery({
+    queryKey: ["open-tasks", "dashboard"],
+    queryFn: () => fetchProjects({ limit: 4 }),
+  });
+
+  const bids = bidsQuery.data ?? [];
+  const pending = bids.filter((bid) => bid.status === "pending");
+  const reviewed = bids.filter((bid) => bid.decision);
+  const passed = reviewed.filter((bid) => bid.decision === "pass").length;
+  const scores = reviewed.flatMap((bid) =>
+    RUBRIC_CRITERIA.map((criterion) => bid[criterion.key]).filter(
+      (value): value is number => value != null,
+    ),
+  );
+  const averageScore = scores.length
+    ? (scores.reduce((sum, value) => sum + value, 0) / scores.length).toFixed(1)
+    : null;
+
+  const submittedTaskIds = new Set(bids.map((bid) => bid.project_id));
+  const suggestions = (openTasksQuery.data ?? []).filter(
+    (project) => !submittedTaskIds.has(project.id),
+  );
+
+  const stats = [
+    { label: "Submissions", value: String(bids.length), icon: FileText },
+    { label: "Awaiting review", value: String(pending.length), icon: Clock },
+    { label: "Passed reviews", value: `${passed}/${reviewed.length}`, icon: CheckCircle2 },
+    {
+      label: "Average rubric score",
+      value: averageScore ? `${averageScore}/5` : "—",
+      icon: Star,
+    },
+  ];
+
+  return (
+    <div className="mt-10 space-y-12">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat) => (
+          <div key={stat.label} className="plate p-5">
+            <p className="flex items-center gap-2 text-sm text-muted-foreground">
+              <stat.icon className="size-4 text-primary" /> {stat.label}
+            </p>
+            <p className="mt-1 font-display text-2xl font-semibold">{stat.value}</p>
+          </div>
+        ))}
+      </div>
+
+      <section>
+        <h2 className="flex items-center gap-2 text-lg font-semibold">
+          <Clock className="size-4 text-primary" /> Awaiting review
+        </h2>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          {bidsQuery.isLoading ? <Skeleton className="h-24 rounded-xl" /> : null}
+          {!bidsQuery.isLoading && pending.length === 0 ? (
+            <p className="plate p-5 text-sm text-muted-foreground">
+              Nothing waiting on a reviewer right now.
+            </p>
+          ) : null}
+          {pending.map((bid) => (
+            <Link
+              key={bid.id}
+              to="/projects/$projectId"
+              params={{ projectId: bid.project_id }}
+              className="plate block p-5 transition-colors hover:border-primary/40"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="font-semibold">{bid.projects?.title ?? "Task"}</h3>
+                <Badge variant="outline">awaiting review</Badge>
+              </div>
+              <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{bid.proposal}</p>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Submitted {timeAgo(bid.created_at)}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="flex items-center gap-2 text-lg font-semibold">
+          <CheckCircle2 className="size-4 text-primary" /> Reviews you received
+        </h2>
+        <div className="mt-4 space-y-3">
+          {!bidsQuery.isLoading && reviewed.length === 0 ? (
+            <p className="plate p-5 text-sm text-muted-foreground">
+              No reviews yet. Feedback and rubric scores appear here once an organization reviews
+              your work.
+            </p>
+          ) : null}
+          {reviewed.map((bid) => (
+            <article key={bid.id} className="plate p-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <Link
+                    to="/projects/$projectId"
+                    params={{ projectId: bid.project_id }}
+                    className="font-semibold hover:text-primary"
+                  >
+                    {bid.projects?.title ?? "Task"}
+                  </Link>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {bid.projects?.category ? `${bid.projects.category} · ` : ""}submitted{" "}
+                    {timeAgo(bid.created_at)}
+                  </p>
+                </div>
+                <Badge variant={statusVariant(bid.status)}>{bid.status}</Badge>
+              </div>
+              {bid.submission_url ? (
+                <a
+                  href={bid.submission_url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="mt-2 inline-block text-sm font-medium text-primary underline"
+                >
+                  Open my deliverable
+                </a>
+              ) : null}
+              <SubmissionReviewSummary bid={bid} />
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <Sparkles className="size-4 text-primary" /> Tasks you can take next
+          </h2>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/portal">Open student portal</Link>
+          </Button>
+        </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          {openTasksQuery.isLoading ? <Skeleton className="h-24 rounded-xl" /> : null}
+          {!openTasksQuery.isLoading && suggestions.length === 0 ? (
+            <p className="plate p-5 text-sm text-muted-foreground">
+              You have submitted work for every open task. Check back soon.
+            </p>
+          ) : null}
+          {suggestions.map((project) => (
+            <Link
+              key={project.id}
+              to="/projects/$projectId"
+              params={{ projectId: project.id }}
+              className="plate block p-5 transition-colors hover:border-primary/40"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="font-semibold">{project.title}</h3>
+                <Badge variant="secondary">{project.difficulty}</Badge>
+              </div>
+              <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                {project.deliverable}
+              </p>
+              <p className="mt-3 text-sm font-medium">
+                {formatReward(project.reward)}{" "}
+                <span className="font-normal text-muted-foreground">
+                  · due {formatDeadline(project.deadline)}
+                </span>
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
