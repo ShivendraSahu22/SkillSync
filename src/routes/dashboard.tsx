@@ -63,11 +63,6 @@ function Dashboard() {
     enabled: Boolean(user) && isOrganization,
   });
 
-  const bidsQuery = useQuery({
-    queryKey: ["my-bids", user?.id],
-    queryFn: () => fetchMyBids(user!.id),
-    enabled: Boolean(user) && isStudent,
-  });
 
 
   if (!user) {
