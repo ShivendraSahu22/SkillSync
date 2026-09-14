@@ -201,41 +201,7 @@ function Dashboard() {
           </section>
         </div>
       ) : (
-        <section className="mt-10">
-          <h2 className="flex items-center gap-2 text-lg font-semibold">
-            <FileText className="size-4 text-primary" /> Work you submitted
-          </h2>
-          <div className="mt-4 grid gap-3 md:grid-cols-2">
-            {bidsQuery.isLoading ? <Skeleton className="h-28 rounded-xl" /> : null}
-            {bidsQuery.data?.length === 0 ? (
-              <p className="plate p-5 text-sm text-muted-foreground">
-                No submissions yet.{" "}
-                <Link to="/projects" className="text-primary underline">
-                  Browse open tasks
-                </Link>
-                .
-              </p>
-            ) : null}
-            {bidsQuery.data?.map((bid) => (
-              <Link
-                key={bid.id}
-                to="/projects/$projectId"
-                params={{ projectId: bid.project_id }}
-                className="plate block p-5 transition-colors hover:border-primary/40"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <h3 className="font-semibold">{bid.projects?.title ?? "Task"}</h3>
-                  <Badge variant={statusVariant(bid.status)}>{bid.status}</Badge>
-                </div>
-                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{bid.proposal}</p>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Submitted {timeAgo(bid.created_at)}
-                </p>
-                <SubmissionReviewSummary bid={bid} />
-              </Link>
-            ))}
-          </div>
-        </section>
+        <StudentSections userId={user.id} />
       )}
     </div>
   );
