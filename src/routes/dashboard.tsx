@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Briefcase, FileText } from "lucide-react";
+import { Briefcase, CheckCircle2, Clock, FileText, Sparkles, Star } from "lucide-react";
 
 import {
   SubmissionReviewForm,
@@ -13,10 +13,12 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   fetchMyBids,
   fetchMyProjects,
+  fetchProjects,
   fetchSubmissionsForMyProjects,
   formatDeadline,
   formatReward,
   initials,
+  RUBRIC_CRITERIA,
   timeAgo,
 } from "@/lib/marketplace";
 
