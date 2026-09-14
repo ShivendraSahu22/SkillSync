@@ -48,7 +48,8 @@ function statusVariant(status: string) {
 }
 
 function Dashboard() {
-  const { user, displayName, isOrganization, isStudent, roleLoading } = useAuth();
+  const { user, displayName, isOrganization, roleLoading } = useAuth();
+
   
 
   const projectsQuery = useQuery({
