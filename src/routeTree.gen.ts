@@ -13,11 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FreelancersRouteImport } from './routes/freelancers'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as OrgProfileRouteImport } from './routes/org-profile'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PostProjectRouteImport } from './routes/post-project'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as StudentSignupRouteImport } from './routes/student-signup'
+import { Route as StudentsRouteImport } from './routes/students'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
 
@@ -39,6 +41,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const FreelancersRoute = FreelancersRouteImport.update({
   id: '/freelancers',
   path: '/freelancers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrgProfileRoute = OrgProfileRouteImport.update({
@@ -66,6 +73,11 @@ const StudentSignupRoute = StudentSignupRouteImport.update({
   path: '/student-signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentsRoute = StudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
@@ -82,11 +94,13 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/org-profile': typeof OrgProfileRoute
   '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
   '/profile': typeof ProfileRoute
   '/student-signup': typeof StudentSignupRoute
+  '/students': typeof StudentsRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -95,11 +109,13 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/org-profile': typeof OrgProfileRoute
   '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
   '/profile': typeof ProfileRoute
   '/student-signup': typeof StudentSignupRoute
+  '/students': typeof StudentsRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -109,11 +125,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/dashboard': typeof DashboardRoute
   '/freelancers': typeof FreelancersRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/org-profile': typeof OrgProfileRoute
   '/portal': typeof PortalRoute
   '/post-project': typeof PostProjectRoute
   '/profile': typeof ProfileRoute
   '/student-signup': typeof StudentSignupRoute
+  '/students': typeof StudentsRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -124,11 +142,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/freelancers'
+    | '/how-it-works'
     | '/org-profile'
     | '/portal'
     | '/post-project'
     | '/profile'
     | '/student-signup'
+    | '/students'
     | '/projects/$projectId'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
@@ -137,11 +157,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/freelancers'
+    | '/how-it-works'
     | '/org-profile'
     | '/portal'
     | '/post-project'
     | '/profile'
     | '/student-signup'
+    | '/students'
     | '/projects/$projectId'
     | '/projects'
   id:
@@ -150,11 +172,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/dashboard'
     | '/freelancers'
+    | '/how-it-works'
     | '/org-profile'
     | '/portal'
     | '/post-project'
     | '/profile'
     | '/student-signup'
+    | '/students'
     | '/projects/$projectId'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -164,11 +188,13 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DashboardRoute: typeof DashboardRoute
   FreelancersRoute: typeof FreelancersRoute
+  HowItWorksRoute: typeof HowItWorksRoute
   OrgProfileRoute: typeof OrgProfileRoute
   PortalRoute: typeof PortalRoute
   PostProjectRoute: typeof PostProjectRoute
   ProfileRoute: typeof ProfileRoute
   StudentSignupRoute: typeof StudentSignupRoute
+  StudentsRoute: typeof StudentsRoute
   ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
@@ -201,6 +227,13 @@ declare module '@tanstack/react-router' {
       path: '/freelancers'
       fullPath: '/freelancers'
       preLoaderRoute: typeof FreelancersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/org-profile': {
@@ -238,6 +271,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentSignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/students': {
+      id: '/students'
+      path: '/students'
+      fullPath: '/students'
+      preLoaderRoute: typeof StudentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/': {
       id: '/projects/'
       path: '/projects'
@@ -260,11 +300,13 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DashboardRoute: DashboardRoute,
   FreelancersRoute: FreelancersRoute,
+  HowItWorksRoute: HowItWorksRoute,
   OrgProfileRoute: OrgProfileRoute,
   PortalRoute: PortalRoute,
   PostProjectRoute: PostProjectRoute,
   ProfileRoute: ProfileRoute,
   StudentSignupRoute: StudentSignupRoute,
+  StudentsRoute: StudentsRoute,
   ProjectsProjectIdRoute: ProjectsProjectIdRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }
