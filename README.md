@@ -1,6 +1,6 @@
 # SkillSync 🚀
  
-## 🌐 Live Demo
+## 🌐 Live Demo 
  
 🚀 **Try SkillSync:** [Live Demo](https://skiillsync.lovable.app)
 
