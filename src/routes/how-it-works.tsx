@@ -123,7 +123,7 @@ function HowItWorks() {
           {RUBRIC_CRITERIA.map((criterion) => (
             <li key={criterion.key} className="plate p-5">
               <p className="font-medium">{criterion.label}</p>
-              <p className="mt-2 text-sm text-muted-foreground">{criterion.description}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{criterion.hint}</p>
             </li>
           ))}
         </ul>
