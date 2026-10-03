@@ -45,7 +45,7 @@ export const matchStudentTasks = createServerFn({ method: "POST" })
       description: data.description,
       profileSkills: profileResult.data?.skills ?? [],
       candidates,
-      initialRunId,
+      ...(initialRunId ? { initialRunId } : {}),
     });
 
     if (result.runId) setResponseHeader("X-Lovable-AIG-Run-ID", result.runId);
