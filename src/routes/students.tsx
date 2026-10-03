@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Clock, Sparkles } from "lucide-react";
 
 import { ProjectCard } from "@/components/project-card";
+import { AiTaskMatcher } from "@/components/ai-task-matcher";
 import { SubmissionReviewSummary } from "@/components/submission-review-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -47,7 +48,7 @@ function relevance(project: Project, skills: string[]) {
 }
 
 function StudentsHome() {
-  const { user, displayName } = useAuth();
+  const { user, displayName, isStudent, roleLoading } = useAuth();
   const userId = user?.id ?? null;
 
   const projectsQuery = useQuery({
@@ -125,6 +126,10 @@ function StudentsHome() {
             </article>
           </div>
         </section>
+      ) : null}
+
+      {user && isStudent && !roleLoading && !projectsQuery.isLoading && !bidsQuery.isLoading ? (
+        <AiTaskMatcher projects={open} profileSkills={skills} />
       ) : null}
 
       <section className="mx-auto max-w-6xl px-4 py-12">
