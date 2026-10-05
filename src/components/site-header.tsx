@@ -16,6 +16,7 @@ import { initials } from "@/lib/marketplace";
 
 const STUDENT_NAV = [
   { to: "/portal", label: "Student portal" },
+  { to: "/chat", label: "AI coach" },
   { to: "/projects", label: "Browse tasks" },
   { to: "/profile", label: "My profile" },
 ] as const;
