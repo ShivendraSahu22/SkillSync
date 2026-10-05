@@ -20,6 +20,7 @@ import { Route as PostProjectRouteImport } from './routes/post-project'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as StudentSignupRouteImport } from './routes/student-signup'
 import { Route as StudentsRouteImport } from './routes/students'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
 
@@ -78,6 +79,11 @@ const StudentsRoute = StudentsRouteImport.update({
   path: '/students',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/student-signup': typeof StudentSignupRoute
   '/students': typeof StudentsRoute
+  '/api/chat': typeof ApiChatRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/student-signup': typeof StudentSignupRoute
   '/students': typeof StudentsRoute
+  '/api/chat': typeof ApiChatRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/student-signup': typeof StudentSignupRoute
   '/students': typeof StudentsRoute
+  '/api/chat': typeof ApiChatRoute
   '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/student-signup'
     | '/students'
+    | '/api/chat'
     | '/projects/$projectId'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/student-signup'
     | '/students'
+    | '/api/chat'
     | '/projects/$projectId'
     | '/projects'
   id:
@@ -179,6 +190,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/student-signup'
     | '/students'
+    | '/api/chat'
     | '/projects/$projectId'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -195,6 +207,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   StudentSignupRoute: typeof StudentSignupRoute
   StudentsRoute: typeof StudentsRoute
+  ApiChatRoute: typeof ApiChatRoute
   ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
@@ -278,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/': {
       id: '/projects/'
       path: '/projects'
@@ -307,6 +327,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   StudentSignupRoute: StudentSignupRoute,
   StudentsRoute: StudentsRoute,
+  ApiChatRoute: ApiChatRoute,
   ProjectsProjectIdRoute: ProjectsProjectIdRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }
