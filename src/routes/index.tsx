@@ -1,6 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, BookOpenCheck, GraduationCap, Search, ShieldCheck, Wallet } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  BookOpenCheck,
+  GraduationCap,
+  Search,
+  ShieldCheck,
+  Wallet,
+} from "lucide-react";
 
 import { ProjectCard } from "@/components/project-card";
 import { Badge } from "@/components/ui/badge";
@@ -100,20 +108,26 @@ function Index() {
             <GraduationCap className="size-6 text-primary" />
             <h2 className="mt-4 text-2xl font-semibold">Built around student progress</h2>
             <p className="mt-2 max-w-lg text-muted-foreground">
-              See tasks matched to your skills, follow your submissions and turn every review into a stronger next attempt.
+              See tasks matched to your skills, follow your submissions and turn every review into a
+              stronger next attempt.
             </p>
             <Button asChild className="mt-5">
-              <Link to="/students">Open student home <ArrowRight className="size-4" /></Link>
+              <Link to="/students">
+                Open student home <ArrowRight className="size-4" />
+              </Link>
             </Button>
           </div>
           <div className="border-t border-border pt-6 md:border-l md:border-t-0 md:pl-8 md:pt-0">
             <BookOpenCheck className="size-6 text-primary" />
             <h2 className="mt-4 text-2xl font-semibold">Know what happens next</h2>
             <p className="mt-2 max-w-lg text-muted-foreground">
-              Follow the full path from choosing a brief and handing in one deliverable to receiving rubric-based feedback.
+              Follow the full path from choosing a brief and handing in one deliverable to receiving
+              rubric-based feedback.
             </p>
             <Button asChild variant="outline" className="mt-5">
-              <Link to="/how-it-works">How SkillSync works <ArrowRight className="size-4" /></Link>
+              <Link to="/how-it-works">
+                How SkillSync works <ArrowRight className="size-4" />
+              </Link>
             </Button>
           </div>
         </div>

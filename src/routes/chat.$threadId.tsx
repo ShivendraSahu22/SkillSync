@@ -8,7 +8,8 @@ export const Route = createFileRoute("/chat/$threadId")({
       { title: "Conversation with SkillSync Coach" },
       {
         name: "description",
-        content: "A private AI coaching conversation for understanding tasks, planning deliverables and applying review feedback.",
+        content:
+          "A private AI coaching conversation for understanding tasks, planning deliverables and applying review feedback.",
       },
       { property: "og:title", content: "Conversation with SkillSync Coach" },
       {

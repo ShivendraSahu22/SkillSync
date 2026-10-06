@@ -48,7 +48,8 @@ export function createChatThread(): LocalChatThread {
 export function titleFromMessages(messages: UIMessage[]) {
   const text = messages
     .find((message) => message.role === "user")
-    ?.parts.find((part) => part.type === "text")?.text.trim();
+    ?.parts.find((part) => part.type === "text")
+    ?.text.trim();
   if (!text) return "New conversation";
   return text.length > 42 ? `${text.slice(0, 42).trim()}…` : text;
 }

@@ -112,14 +112,22 @@ export function SkillCoachChatPage() {
   );
 
   if (loading || roleLoading || !storageReady) {
-    return <div className="mx-auto max-w-6xl px-4 py-10"><Skeleton className="h-[70vh] rounded-lg" /></div>;
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        <Skeleton className="h-[70vh] rounded-lg" />
+      </div>
+    );
   }
   if (!user) {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <h1 className="text-2xl font-semibold">Sign in to use SkillSync Coach</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Your conversations stay saved in this browser.</p>
-        <Button asChild className="mt-6"><Link to="/auth">Sign in</Link></Button>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Your conversations stay saved in this browser.
+        </p>
+        <Button asChild className="mt-6">
+          <Link to="/auth">Sign in</Link>
+        </Button>
       </div>
     );
   }
@@ -127,8 +135,12 @@ export function SkillCoachChatPage() {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <h1 className="text-2xl font-semibold">The AI coach is for students</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Use your organization dashboard to post tasks and review work.</p>
-        <Button asChild className="mt-6"><Link to="/dashboard">Go to dashboard</Link></Button>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Use your organization dashboard to post tasks and review work.
+        </p>
+        <Button asChild className="mt-6">
+          <Link to="/dashboard">Go to dashboard</Link>
+        </Button>
       </div>
     );
   }
@@ -136,8 +148,12 @@ export function SkillCoachChatPage() {
     return (
       <div className="mx-auto max-w-md px-4 py-20 text-center">
         <h1 className="text-2xl font-semibold">Conversation not found</h1>
-        <p className="mt-2 text-sm text-muted-foreground">It may have been deleted from this browser.</p>
-        <Button className="mt-6" onClick={makeThread}>Start a new conversation</Button>
+        <p className="mt-2 text-sm text-muted-foreground">
+          It may have been deleted from this browser.
+        </p>
+        <Button className="mt-6" onClick={makeThread}>
+          Start a new conversation
+        </Button>
       </div>
     );
   }
@@ -236,13 +252,25 @@ function SkillCoachWorkspace({
               <p className="text-xs text-muted-foreground">Saved in this browser</p>
             </div>
           </div>
-          <Button type="button" size="icon-sm" variant="ghost" onClick={onNew} title="New conversation">
+          <Button
+            type="button"
+            size="icon-sm"
+            variant="ghost"
+            onClick={onNew}
+            title="New conversation"
+          >
             <Plus />
           </Button>
         </div>
         <div className="mt-4 flex-1 space-y-1 overflow-y-auto">
           {threads.map((item) => (
-            <div key={item.id} className={cn("group flex items-center rounded-md", item.id === thread.id && "bg-sidebar-accent")}>
+            <div
+              key={item.id}
+              className={cn(
+                "group flex items-center rounded-md",
+                item.id === thread.id && "bg-sidebar-accent",
+              )}
+            >
               <Link
                 to="/chat/$threadId"
                 params={{ threadId: item.id }}
@@ -268,12 +296,21 @@ function SkillCoachWorkspace({
 
       <section className="flex min-w-0 flex-1 flex-col bg-background">
         <header className="flex h-16 shrink-0 items-center gap-3 border-b border-border px-4">
-          <Button type="button" size="icon-sm" variant="ghost" className="md:hidden" onClick={() => setSidebarOpen(true)} title="Conversations">
+          <Button
+            type="button"
+            size="icon-sm"
+            variant="ghost"
+            className="md:hidden"
+            onClick={() => setSidebarOpen(true)}
+            title="Conversations"
+          >
             <PanelLeft />
           </Button>
           <div className="min-w-0">
             <h1 className="truncate font-display text-lg font-semibold">{thread.title}</h1>
-            <p className="text-xs text-muted-foreground">Task planning, submission feedback and skill guidance</p>
+            <p className="text-xs text-muted-foreground">
+              Task planning, submission feedback and skill guidance
+            </p>
           </div>
           <Button type="button" size="sm" variant="outline" className="ml-auto" onClick={onNew}>
             <Plus /> New chat
@@ -289,14 +326,27 @@ function SkillCoachWorkspace({
                 description="Ask for help understanding a brief, planning a deliverable or applying review feedback."
               >
                 <div className="mx-auto flex max-w-lg flex-col items-center gap-4 text-center">
-                  <img src={logoAsset.url} alt="SkillSync Coach" className="size-14 object-contain" />
+                  <img
+                    src={logoAsset.url}
+                    alt="SkillSync Coach"
+                    className="size-14 object-contain"
+                  />
                   <div>
                     <h2 className="font-display text-xl font-semibold">What are you working on?</h2>
-                    <p className="mt-1 text-sm text-muted-foreground">Ask for help understanding a brief, planning a deliverable or applying review feedback.</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Ask for help understanding a brief, planning a deliverable or applying review
+                      feedback.
+                    </p>
                   </div>
                   <div className="flex flex-wrap justify-center gap-2">
                     {STARTERS.map((starter) => (
-                      <Button key={starter} type="button" variant="outline" size="sm" onClick={() => void submit(starter)}>
+                      <Button
+                        key={starter}
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => void submit(starter)}
+                      >
                         {starter}
                       </Button>
                     ))}
@@ -308,10 +358,19 @@ function SkillCoachWorkspace({
               <Message key={message.id} from={message.role}>
                 <MessageContent>
                   {message.parts.map((part, index) => {
-                    if (part.type === "text") return <MessageResponse key={`${message.id}-text-${index}`}>{part.text}</MessageResponse>;
+                    if (part.type === "text")
+                      return (
+                        <MessageResponse key={`${message.id}-text-${index}`}>
+                          {part.text}
+                        </MessageResponse>
+                      );
                     if (part.type === "reasoning") {
                       return (
-                        <Reasoning key={`${message.id}-reasoning-${index}`} isStreaming={busy && message.id === messages.at(-1)?.id} defaultOpen={false}>
+                        <Reasoning
+                          key={`${message.id}-reasoning-${index}`}
+                          isStreaming={busy && message.id === messages.at(-1)?.id}
+                          defaultOpen={false}
+                        >
                           <ReasoningTrigger />
                           <ReasoningContent>{part.text}</ReasoningContent>
                         </Reasoning>
@@ -347,7 +406,9 @@ function SkillCoachWorkspace({
               maxLength={2000}
             />
             <PromptInputFooter className="justify-between">
-              <span className="text-xs text-muted-foreground">AI guidance can be wrong. Check the task brief.</span>
+              <span className="text-xs text-muted-foreground">
+                AI guidance can be wrong. Check the task brief.
+              </span>
               <PromptInputSubmit status={status} onStop={stop} disabled={!input.trim() && !busy} />
             </PromptInputFooter>
           </PromptInput>

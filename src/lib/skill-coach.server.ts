@@ -15,8 +15,10 @@ function safeErrorMessage(error: unknown) {
   if (!APICallError.isInstance(error)) return "The AI coach could not reply right now.";
   if (error.statusCode === 402 || error.statusCode === 403) return error.message;
   if (error.statusCode === 429) return "The AI coach is busy. Please try again shortly.";
-  if (error.statusCode && error.statusCode >= 500) return "The AI coach is temporarily unavailable.";
-  if (error.statusCode === 400) return "That message could not be processed. Try a shorter request.";
+  if (error.statusCode && error.statusCode >= 500)
+    return "The AI coach is temporarily unavailable.";
+  if (error.statusCode === 400)
+    return "That message could not be processed. Try a shorter request.";
   return "The AI coach could not reply right now.";
 }
 
@@ -45,7 +47,8 @@ async function requireStudent(request: Request) {
 
   const url = process.env["SUPABASE_URL"];
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
-  if (!url || !key) return { error: new Response("Student access is unavailable.", { status: 500 }) };
+  if (!url || !key)
+    return { error: new Response("Student access is unavailable.", { status: 500 }) };
 
   const supabase = createClient<Database>(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -57,15 +60,20 @@ async function requireStudent(request: Request) {
   const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
   const userId = claimsData?.claims?.sub;
   if (claimsError || !userId) {
-    return { error: new Response("Your sign-in has expired. Please sign in again.", { status: 401 }) };
+    return {
+      error: new Response("Your sign-in has expired. Please sign in again.", { status: 401 }),
+    };
   }
   const { data: isStudent, error: roleError } = await supabase.rpc("has_role", {
     _user_id: userId,
     _role: "student",
   });
-  if (roleError) return { error: new Response("Student access could not be verified.", { status: 500 }) };
+  if (roleError)
+    return { error: new Response("Student access could not be verified.", { status: 500 }) };
   if (!isStudent) {
-    return { error: new Response("The AI coach is available to student accounts only.", { status: 403 }) };
+    return {
+      error: new Response("The AI coach is available to student accounts only.", { status: 403 }),
+    };
   }
   return { error: null };
 }

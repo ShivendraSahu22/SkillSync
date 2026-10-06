@@ -85,18 +85,18 @@ Pass or fail with actionable feedback
 
 ## Application pages
 
-| Page | Purpose |
-| --- | --- |
-| `/` | Main marketplace homepage |
-| `/students` | Student home with relevant tasks, submissions, reviews, and AI matching |
-| `/how-it-works` | Student and organization workflow guide |
-| `/portal` | Student task browsing, submission, and review tracking |
-| `/profile` | Student profile and submission history |
-| `/chat` | Student-only AI coach and conversation list |
-| `/projects` | Public open-task directory |
-| `/post-project` | Organization task creation |
-| `/dashboard` | Role-specific student or organization dashboard |
-| `/org-profile` | Organization identity and contact settings |
+| Page            | Purpose                                                                 |
+| --------------- | ----------------------------------------------------------------------- |
+| `/`             | Main marketplace homepage                                               |
+| `/students`     | Student home with relevant tasks, submissions, reviews, and AI matching |
+| `/how-it-works` | Student and organization workflow guide                                 |
+| `/portal`       | Student task browsing, submission, and review tracking                  |
+| `/profile`      | Student profile and submission history                                  |
+| `/chat`         | Student-only AI coach and conversation list                             |
+| `/projects`     | Public open-task directory                                              |
+| `/post-project` | Organization task creation                                              |
+| `/dashboard`    | Role-specific student or organization dashboard                         |
+| `/org-profile`  | Organization identity and contact settings                              |
 
 ## Technology
 
