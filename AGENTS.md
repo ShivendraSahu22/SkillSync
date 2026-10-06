@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep Lovable AI Gateway calls in authenticated server functions with provider setup isolated in `*.server.ts`; this protects keys and enforces student access.
+- Keep AI chat threads in browser storage with route-derived thread IDs, while streaming model calls through an authenticated server route; this preserves private multi-thread navigation without database persistence.
