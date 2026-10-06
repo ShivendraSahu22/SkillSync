@@ -15,8 +15,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { initials } from "@/lib/marketplace";
 
 const STUDENT_NAV = [
+  { to: "/students", label: "Student home" },
   { to: "/portal", label: "Student portal" },
   { to: "/chat", label: "AI coach" },
+  { to: "/how-it-works", label: "How it works" },
   { to: "/projects", label: "Browse tasks" },
   { to: "/profile", label: "My profile" },
 ] as const;
@@ -24,12 +26,15 @@ const STUDENT_NAV = [
 const ORG_NAV = [
   { to: "/projects", label: "Tasks" },
   { to: "/freelancers", label: "Students" },
+  { to: "/how-it-works", label: "How it works" },
   { to: "/post-project", label: "Post a task" },
   { to: "/org-profile", label: "Organization" },
 ] as const;
 
 const GUEST_NAV = [
+  { to: "/students", label: "Student home" },
   { to: "/projects", label: "Browse tasks" },
+  { to: "/how-it-works", label: "How it works" },
   { to: "/freelancers", label: "Students" },
 ] as const;
 
