@@ -94,10 +94,12 @@ export function SkillCoachChatPage() {
     (id: string) => {
       const remaining = threads.filter((item) => item.id !== id);
       if (remaining.length > 0) {
+        const nextThread = remaining[0];
+        if (!nextThread) return;
         writeChatThreads(remaining);
         setThreads(remaining);
         if (id === threadId) {
-          void navigate({ to: "/chat/$threadId", params: { threadId: remaining[0].id } });
+          void navigate({ to: "/chat/$threadId", params: { threadId: nextThread.id } });
         }
         return;
       }
