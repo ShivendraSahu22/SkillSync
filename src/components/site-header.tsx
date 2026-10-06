@@ -24,6 +24,7 @@ const STUDENT_NAV = [
 ] as const;
 
 const ORG_NAV = [
+  { to: "/organizations", label: "Org home" },
   { to: "/projects", label: "Tasks" },
   { to: "/freelancers", label: "Students" },
   { to: "/how-it-works", label: "How it works" },
