@@ -39,6 +39,7 @@ export type Profile = {
   contact_email: string | null;
   contact_phone: string | null;
   website: string | null;
+  approval_status?: string;
 };
 
 export type OrganizationProfileInput = {
@@ -343,7 +344,12 @@ export async function submitDeliverable(input: {
     submission_url: url,
     proposal: notes,
   } as never);
-  if (error) throw error;
+  if (error) {
+    if (error.code === "42501") {
+      throw new Error("Your student account is awaiting admin approval before you can submit work.");
+    }
+    throw error;
+  }
 }
 
 export type ReviewInput = {
@@ -394,5 +400,47 @@ export async function reviewSubmission(bidId: string, input: ReviewInput) {
       reviewer_feedback: feedback,
     } as never)
     .eq("id", bidId);
+  if (error) throw error;
+}
+
+export async function fetchIsAdmin(userId: string) {
+  const { data, error } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+  if (error) return false;
+  return (data ?? []).some((row) => String(row.role) === "admin");
+}
+
+export async function adminFetchStudents() {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("account_role", "student")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as (Profile & { created_at: string })[];
+}
+
+export async function adminSetApproval(userId: string, status: "approved" | "rejected" | "pending") {
+  const { error } = await supabase
+    .from("profiles")
+    .update({ approval_status: status } as never)
+    .eq("user_id", userId);
+  if (error) throw error;
+}
+
+export async function adminFetchAllSubmissions() {
+  const { data, error } = await supabase
+    .from("bids")
+    .select("*, projects(title, owner_name)")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as unknown as (Bid & { projects: { title: string; owner_name: string } | null })[];
+}
+
+export async function adminUpdateTask(projectId: string, reward: number, deadline: string | null) {
+  if (!Number.isFinite(reward) || reward < 0) throw new Error("Reward must be zero or more.");
+  const { error } = await supabase
+    .from("projects")
+    .update({ reward, deadline } as never)
+    .eq("id", projectId);
   if (error) throw error;
 }
