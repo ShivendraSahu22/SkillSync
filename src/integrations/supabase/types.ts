@@ -76,6 +76,7 @@ export type Database = {
       profiles: {
         Row: {
           account_role: string
+          approval_status: string
           avatar_url: string | null
           bio: string | null
           contact_email: string | null
@@ -95,6 +96,7 @@ export type Database = {
         }
         Insert: {
           account_role?: string
+          approval_status?: string
           avatar_url?: string | null
           bio?: string | null
           contact_email?: string | null
@@ -114,6 +116,7 @@ export type Database = {
         }
         Update: {
           account_role?: string
+          approval_status?: string
           avatar_url?: string | null
           bio?: string | null
           contact_email?: string | null
@@ -226,9 +229,11 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_approved_student: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "student" | "organization"
+      app_role: "student" | "organization" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -356,7 +361,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["student", "organization"],
+      app_role: ["student", "organization", "admin"],
     },
   },
 } as const
