@@ -40,8 +40,11 @@ const GUEST_NAV = [
 ] as const;
 
 export function SiteHeader() {
-  const { user, displayName, signOut, isOrganization, isStudent } = useAuth();
-  const NAV = user ? (isOrganization ? ORG_NAV : isStudent ? STUDENT_NAV : GUEST_NAV) : GUEST_NAV;
+  const { user, displayName, signOut, isOrganization, isStudent, isAdmin } = useAuth();
+  const BASE_NAV = user ? (isOrganization ? ORG_NAV : isStudent ? STUDENT_NAV : GUEST_NAV) : GUEST_NAV;
+  const NAV: readonly { to: string; label: string }[] = isAdmin
+    ? [...BASE_NAV, { to: "/admin", label: "Admin" }]
+    : BASE_NAV;
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 

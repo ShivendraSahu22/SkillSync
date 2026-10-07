@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import type { Session, User } from "@supabase/supabase-js";
 
 import { supabase } from "@/integrations/supabase/client";
-import { fetchMyRole, type AccountRole } from "@/lib/marketplace";
+import { fetchIsAdmin, fetchMyRole, type AccountRole } from "@/lib/marketplace";
 
 type AuthContextValue = {
   session: Session | null;
@@ -13,6 +13,7 @@ type AuthContextValue = {
   roleLoading: boolean;
   isStudent: boolean;
   isOrganization: boolean;
+  isAdmin: boolean;
   signOut: () => Promise<void>;
 };
 
@@ -23,6 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<AccountRole | null>(null);
   const [roleLoading, setRoleLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
@@ -43,14 +45,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!userId) {
       setRole(null);
+      setIsAdmin(false);
       setRoleLoading(false);
       return;
     }
     let active = true;
     setRoleLoading(true);
-    fetchMyRole(userId)
-      .then((value) => {
-        if (active) setRole(value);
+    Promise.all([fetchMyRole(userId), fetchIsAdmin(userId)])
+      .then(([value, admin]) => {
+        if (active) {
+          setRole(value);
+          setIsAdmin(admin);
+        }
       })
       .catch(() => {
         if (active) setRole(null);
@@ -75,11 +81,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       roleLoading,
       isStudent: role === "student",
       isOrganization: role === "organization",
+      isAdmin,
       signOut: async () => {
         await supabase.auth.signOut();
       },
     };
-  }, [session, loading, role, roleLoading]);
+  }, [session, loading, role, roleLoading, isAdmin]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
