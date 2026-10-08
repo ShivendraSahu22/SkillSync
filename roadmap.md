@@ -5,4 +5,4 @@
 - [x] Add clear student home and how-it-works links to the top navigation and main homepage.
 - [x] Improve README.md to document the completed SkillSync app.
 
-- [ ] Email students when their account is approved and when a submission is reviewed
+- [ ] Email students when their account is approved and when a submission is reviewed (waiting on: user sets up a sender email domain they own)
