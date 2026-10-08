@@ -419,11 +419,11 @@ export async function adminFetchStudents() {
   return (data ?? []) as (Profile & { created_at: string })[];
 }
 
-export async function adminSetApproval(userId: string, status: "approved" | "rejected" | "pending") {
+export async function adminSetApproval(profileId: string, status: "approved" | "rejected" | "pending") {
   const { error } = await supabase
     .from("profiles")
     .update({ approval_status: status } as never)
-    .eq("user_id", userId);
+    .eq("id", profileId);
   if (error) throw error;
 }
 
