@@ -116,17 +116,17 @@ function StudentsTab() {
             <Badge variant={p.approval_status === "approved" ? "default" : "outline"} className="capitalize">
               {p.approval_status ?? "approved"}
             </Badge>
-            {p.user_id && p.approval_status !== "approved" ? (
-              <Button size="sm" disabled={m.isPending} onClick={() => m.mutate({ userId: p.user_id!, status: "approved" })}>
+            {p.approval_status !== "approved" ? (
+              <Button size="sm" disabled={m.isPending} onClick={() => m.mutate({ userId: p.id, status: "approved" })}>
                 Approve
               </Button>
             ) : null}
-            {p.user_id && p.approval_status !== "rejected" ? (
+            {p.approval_status !== "rejected" ? (
               <Button
                 size="sm"
                 variant="outline"
                 disabled={m.isPending}
-                onClick={() => m.mutate({ userId: p.user_id!, status: "rejected" })}
+                onClick={() => m.mutate({ userId: p.id, status: "rejected" })}
               >
                 Reject
               </Button>
