@@ -6,3 +6,4 @@
 - [x] Improve README.md to document the completed SkillSync app.
 
 - [ ] Email students when their account is approved and when a submission is reviewed (waiting on: user sets up a sender email domain they own)
+- [ ] Post a real task from Org home, hand in a submission and review it end to end
