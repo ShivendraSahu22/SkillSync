@@ -1,5 +1,5 @@
 # SkillSync
-
+ 
 SkillSync is a student micro-task marketplace where organizations post short, clearly scoped tasks and students submit one measurable deliverable for a fixed reward. Every submission is reviewed against a transparent rubric so students can build practical experience and a credible record of their work.
 
 ## Live project
