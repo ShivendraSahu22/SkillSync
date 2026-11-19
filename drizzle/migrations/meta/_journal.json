@@ -8,6 +8,13 @@
       "when": 1795026380925,
       "tag": "0000_restrict_public_projects_profiles",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795114208255,
+      "tag": "0001_fix_project_submission_policy_recursion",
+      "breakpoints": true
     }
   ]
 }

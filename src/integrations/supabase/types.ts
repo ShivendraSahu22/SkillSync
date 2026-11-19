@@ -229,6 +229,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_submitted_to_project: {
+        Args: { _project_id: string }
+        Returns: boolean
+      }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_approved_student: { Args: { _user_id: string }; Returns: boolean }
     }
